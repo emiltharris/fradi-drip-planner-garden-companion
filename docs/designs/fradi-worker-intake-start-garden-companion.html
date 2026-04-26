@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FRADI Drip Planner - Garden Companion</title>
+  <title>FRADI Drip Planner - Intake Flow</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;500;700;800&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet" />
@@ -11,311 +11,83 @@
     :root {
       color-scheme: light dark;
       --bg: #f7f4ea;
-      --bg-strong: #e8f0e4;
-      --surface: rgba(255, 255, 255, 0.88);
-      --surface-strong: #ffffff;
-      --surface-soft: #eff6ee;
-      --line: rgba(16, 58, 44, 0.1);
-      --line-strong: rgba(16, 58, 44, 0.18);
+      --bg-strong: #efe9d8;
+      --surface: #ffffff;
+      --surface-soft: #f1ede2;
+      --line: rgba(16, 58, 44, 0.12);
+      --line-strong: rgba(16, 58, 44, 0.22);
       --text: #17392d;
-      --muted: #4d6b5f;
+      --muted: #5a6f64;
       --green: #168157;
       --green-strong: #0f6544;
       --gold: #f3bb48;
-      --orange: #ef8c3c;
-      --blue-soft: #e6efff;
-      --blue-text: #32509d;
-      --shadow: 0 18px 40px rgba(37, 53, 44, 0.12);
-      --shadow-soft: 0 10px 24px rgba(37, 53, 44, 0.08);
-      --radius-xl: 30px;
+      --selected-bg: rgba(22, 129, 87, 0.08);
+      --shadow-soft: 0 6px 14px rgba(37, 53, 44, 0.06);
+      --shadow-cta: 0 6px 16px rgba(16, 101, 68, 0.18);
       --radius-lg: 22px;
-      --radius-md: 18px;
-      --radius-sm: 14px;
-      --space-1: 4px;
-      --space-2: 8px;
-      --space-3: 12px;
-      --space-4: 16px;
-      --space-5: 20px;
-      --space-6: 24px;
-      --space-7: 32px;
-      --space-8: 40px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
       --phone-width: min(100%, 430px);
-      --content-max: 1260px;
-      --ring: 0 0 0 4px rgba(22, 129, 87, 0.18);
+      --ring: 0 0 0 3px rgba(22, 129, 87, 0.28);
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
         --bg: #0f1713;
         --bg-strong: #14211b;
-        --surface: rgba(20, 33, 27, 0.86);
-        --surface-strong: #192721;
-        --surface-soft: #102019;
-        --line: rgba(219, 245, 229, 0.08);
-        --line-strong: rgba(219, 245, 229, 0.14);
+        --surface: #192721;
+        --surface-soft: #142019;
+        --line: rgba(219, 245, 229, 0.10);
+        --line-strong: rgba(219, 245, 229, 0.22);
         --text: #ecf7ef;
-        --muted: #a4beb2;
+        --muted: #9eb5aa;
         --green: #57d39b;
         --green-strong: #7be4b0;
         --gold: #f5c45c;
-        --orange: #f3a05d;
-        --blue-soft: rgba(60, 92, 164, 0.22);
-        --blue-text: #c9d7ff;
-        --shadow: 0 18px 44px rgba(0, 0, 0, 0.28);
-        --shadow-soft: 0 12px 28px rgba(0, 0, 0, 0.18);
-        --ring: 0 0 0 4px rgba(87, 211, 155, 0.18);
+        --selected-bg: rgba(87, 211, 155, 0.12);
+        --shadow-soft: 0 6px 14px rgba(0, 0, 0, 0.24);
+        --shadow-cta: 0 6px 16px rgba(0, 0, 0, 0.36);
+        --ring: 0 0 0 3px rgba(87, 211, 155, 0.32);
       }
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     html, body {
       margin: 0;
       min-height: 100%;
-      background:
-        radial-gradient(circle at top left, rgba(243, 187, 72, 0.22), transparent 24%),
-        radial-gradient(circle at top right, rgba(22, 129, 87, 0.18), transparent 22%),
-        linear-gradient(180deg, var(--bg) 0%, var(--bg-strong) 100%);
+      background: var(--bg);
       color: var(--text);
       font-family: "Atkinson Hyperlegible Next", sans-serif;
+      -webkit-font-smoothing: antialiased;
     }
 
-    body::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0.02;
-      background-image:
-        radial-gradient(rgba(0, 0, 0, 0.65) 0.45px, transparent 0.45px);
-      background-size: 9px 9px;
-      mix-blend-mode: multiply;
+    body {
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      min-height: 100vh;
     }
 
-    a, button {
-      transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+    button {
+      font-family: inherit;
+      transition: transform 140ms ease, box-shadow 140ms ease, background-color 140ms ease, border-color 140ms ease;
     }
 
-    a:focus-visible,
     button:focus-visible,
-    [contenteditable="true"]:focus-visible {
+    [contenteditable="true"]:focus-visible,
+    .tile:focus-visible,
+    input:focus-visible {
       outline: none;
       box-shadow: var(--ring);
-      border-radius: 12px;
-    }
-
-    .site-header {
-      max-width: var(--content-max);
-      margin: 0 auto;
-      padding: 20px 20px 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: var(--space-4);
-    }
-
-    .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .brand-mark {
-      width: 44px;
-      height: 44px;
-      border-radius: 16px;
-      background: linear-gradient(180deg, var(--gold) 0%, var(--orange) 100%);
-      position: relative;
-      box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.08);
-    }
-
-    .brand-mark::before,
-    .brand-mark::after {
-      content: "";
-      position: absolute;
-      background: rgba(255, 255, 255, 0.96);
-      border-radius: 999px;
-    }
-
-    .brand-mark::before {
-      width: 26px;
-      height: 6px;
-      top: 14px;
-      left: 9px;
-      box-shadow: 0 12px 0 rgba(255, 255, 255, 0.96);
-    }
-
-    .brand-mark::after {
-      width: 6px;
-      height: 28px;
-      top: 8px;
-      left: 12px;
-      box-shadow: 10px 0 0 rgba(255, 255, 255, 0.96), 20px 0 0 rgba(255, 255, 255, 0.96);
-    }
-
-    .brand-copy strong {
-      display: block;
-      font: 900 12px/1 "Nunito", sans-serif;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-    }
-
-    .brand-copy span {
-      display: block;
-      color: var(--muted);
-      font-size: 13px;
-      margin-top: 2px;
-    }
-
-    .header-actions {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
-    .status-pill,
-    .mini-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      min-height: 42px;
-      padding: 0 14px;
-      border-radius: 999px;
-      background: var(--surface);
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow-soft);
-      font-size: 13px;
-      font-weight: 800;
-      color: var(--text);
-    }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: var(--green);
-      box-shadow: 0 0 0 6px rgba(22, 129, 87, 0.12);
-    }
-
-    .page {
-      max-width: var(--content-max);
-      margin: 0 auto;
-      padding: 18px 20px 56px;
-    }
-
-    .hero {
-      display: grid;
-      gap: 20px;
-      align-items: start;
-    }
-
-    .hero-copy {
-      display: grid;
-      gap: 14px;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      width: fit-content;
-      min-height: 36px;
-      padding: 0 12px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.68);
-      border: 1px solid var(--line);
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--green-strong);
-    }
-
-    h1 {
-      margin: 0;
-      font: 900 clamp(40px, 7vw, 68px)/0.94 "Nunito", sans-serif;
-      letter-spacing: -0.05em;
-      max-width: 11ch;
-    }
-
-    .lede {
-      margin: 0;
-      max-width: 58ch;
-      color: var(--muted);
-      font-size: 17px;
-      line-height: 1.55;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .button {
-      appearance: none;
-      border: 0;
-      text-decoration: none;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      min-height: 56px;
-      padding: 0 20px;
-      border-radius: 20px;
-      font: 900 17px/1 "Nunito", sans-serif;
-      letter-spacing: -0.02em;
-    }
-
-    .button-primary {
-      color: #f5fff9;
-      background: linear-gradient(180deg, var(--green) 0%, var(--green-strong) 100%);
-      box-shadow: 0 14px 28px rgba(16, 101, 68, 0.2);
-    }
-
-    .button-secondary {
-      color: var(--text);
-      background: var(--surface);
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow-soft);
-    }
-
-    .button:hover,
-    .button:focus-visible {
-      transform: translateY(-1px);
-    }
-
-    .hero-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 2px;
-    }
-
-    .hero-meta .mini-pill {
-      background: rgba(255, 255, 255, 0.72);
-    }
-
-    .showcase {
-      display: grid;
-      gap: 18px;
-      align-items: start;
-      margin-top: 22px;
     }
 
     .phone-shell {
       width: var(--phone-width);
-      margin: 0 auto;
       border-radius: 38px;
       background: #151716;
       padding: 10px;
-      box-shadow: 0 32px 70px rgba(0, 0, 0, 0.22);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
       position: relative;
     }
 
@@ -333,248 +105,138 @@
     }
 
     .app {
-      background: linear-gradient(180deg, #fbf9f2 0%, #edf4ee 100%);
+      background: var(--bg);
       border-radius: 30px;
       overflow: hidden;
-      min-height: 780px;
+      min-height: 760px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
       position: relative;
     }
 
-    @media (prefers-color-scheme: dark) {
-      .app {
-        background: linear-gradient(180deg, #112018 0%, #13231b 100%);
-      }
-    }
-
-    .app-header {
-      padding: 42px 18px 18px;
-      display: grid;
-      gap: 16px;
-      background:
-        radial-gradient(circle at top right, rgba(243, 187, 72, 0.26), transparent 30%),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.54), rgba(255, 255, 255, 0));
-    }
-
-    @media (prefers-color-scheme: dark) {
-      .app-header {
-        background:
-          radial-gradient(circle at top right, rgba(243, 187, 72, 0.18), transparent 32%),
-          linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0));
-      }
-    }
-
-    .app-bar {
+    /* Top bar */
+    .top-bar {
+      padding: 44px 20px 12px;
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
 
-    .app-bar .label {
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--green-strong);
-    }
-
-    .offline-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      min-height: 36px;
-      padding: 0 12px;
-      border-radius: 999px;
-      background: #d9f4df;
-      color: #1e6a40;
-      font-size: 12px;
-      font-weight: 800;
-      border: 1px solid rgba(22, 129, 87, 0.12);
-    }
-
-    .offline-chip .status-dot {
-      width: 7px;
-      height: 7px;
-      box-shadow: none;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      .offline-chip {
-        background: rgba(87, 211, 155, 0.16);
-        color: #bdf0d2;
-        border-color: rgba(87, 211, 155, 0.14);
-      }
-    }
-
-    .hero-panel {
+    .back-btn {
+      appearance: none;
+      border: 1px solid var(--line);
       background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 28px;
-      padding: 18px;
-      box-shadow: var(--shadow-soft);
-      display: grid;
-      gap: 14px;
-    }
-
-    .hero-visual {
-      display: grid;
-      grid-template-columns: 96px 1fr;
-      gap: 14px;
-      align-items: center;
-    }
-
-    .icon-tile {
-      width: 96px;
-      height: 96px;
-      border-radius: 28px;
-      background: linear-gradient(180deg, var(--gold) 0%, var(--orange) 100%);
-      position: relative;
-      box-shadow: inset 0 -6px 0 rgba(0, 0, 0, 0.08);
-      overflow: hidden;
-    }
-
-    .icon-tile::before,
-    .icon-tile::after {
-      content: "";
-      position: absolute;
-      background: rgba(255, 255, 255, 0.98);
-      border-radius: 999px;
-    }
-
-    .icon-tile::before {
-      width: 58px;
-      height: 10px;
-      top: 30px;
-      left: 19px;
-      box-shadow: 0 20px 0 rgba(255, 255, 255, 0.98);
-    }
-
-    .icon-tile::after {
-      width: 10px;
-      height: 44px;
-      top: 25px;
-      left: 26px;
-      box-shadow: 20px 0 0 rgba(255, 255, 255, 0.98), 40px 0 0 rgba(255, 255, 255, 0.98);
-    }
-
-    .hero-panel h2 {
-      margin: 0;
-      font: 900 34px/0.97 "Nunito", sans-serif;
-      letter-spacing: -0.05em;
-    }
-
-    .hero-panel p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.48;
-    }
-
-    .app-cta {
-      min-height: 62px;
-      border-radius: 22px;
-      width: 100%;
-    }
-
-    .quick-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    .quick-card {
-      background: rgba(255, 255, 255, 0.84);
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      padding: 12px;
-      min-height: 110px;
-      display: grid;
-      gap: 8px;
-      align-content: start;
-      box-shadow: var(--shadow-soft);
-    }
-
-    @media (prefers-color-scheme: dark) {
-      .quick-card {
-        background: rgba(255, 255, 255, 0.03);
-      }
-    }
-
-    .quick-card strong {
-      font: 800 15px/1.1 "Nunito", sans-serif;
-    }
-
-    .quick-card span {
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.45;
-    }
-
-    .quick-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 14px;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      background: var(--surface-soft);
-      border: 1px solid var(--line);
-      position: relative;
+      cursor: pointer;
+      color: var(--text);
     }
 
-    .quick-icon svg {
-      width: 22px;
-      height: 22px;
-      stroke: var(--green-strong);
-      stroke-width: 1.9;
+    .back-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .back-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      stroke-width: 2;
       fill: none;
       stroke-linecap: round;
       stroke-linejoin: round;
     }
 
-    .panel-stack {
-      padding: 0 18px 20px;
+    .progress-label {
+      font: 800 12px/1 "Nunito", sans-serif;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* Screen body */
+    .screen-body {
+      padding: 8px 20px 24px;
+      overflow-y: auto;
       display: grid;
-      gap: 12px;
+      align-content: start;
+      gap: 18px;
     }
 
-    .panel {
+    .screen { display: none; gap: 18px; grid-template-columns: 1fr; }
+    .screen.active { display: grid; }
+
+    h2.title {
+      margin: 0;
+      font: 900 28px/1.05 "Nunito", sans-serif;
+      letter-spacing: -0.03em;
+      color: var(--text);
+    }
+
+    p.helper {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* Form rows */
+    .row-group {
+      display: grid;
+      gap: 8px;
+    }
+
+    .row-label {
+      font: 800 12px/1 "Nunito", sans-serif;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* Tile — generic tappable option */
+    .tile-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .tile {
+      appearance: none;
+      cursor: pointer;
       background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      padding: 16px;
-      box-shadow: var(--shadow-soft);
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 12px 8px;
+      min-height: 92px;
+      display: grid;
+      gap: 6px;
+      align-content: center;
+      justify-items: center;
+      text-align: center;
+      color: var(--text);
     }
 
-    .panel-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 12px;
+    .tile.selected {
+      border-color: var(--green);
+      background: var(--selected-bg);
     }
 
-    .panel-head strong {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font: 800 15px/1.1 "Nunito", sans-serif;
-    }
-
-    .icon-badge {
-      width: 28px;
-      height: 28px;
-      border-radius: 12px;
+    .tile-icon {
+      width: 36px;
+      height: 36px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      background: var(--surface-soft);
-      border: 1px solid var(--line);
     }
 
-    .icon-badge svg {
-      width: 18px;
-      height: 18px;
+    .tile-icon svg {
+      width: 100%;
+      height: 100%;
       stroke: var(--green-strong);
       stroke-width: 1.8;
       fill: none;
@@ -582,645 +244,800 @@
       stroke-linejoin: round;
     }
 
-    .linkish {
-      color: var(--green-strong);
-      font-size: 12px;
-      font-weight: 800;
-      text-decoration: none;
+    .tile-label {
+      font: 800 13px/1.2 "Nunito", sans-serif;
     }
 
-    .draft-list,
-    .queue-list,
-    .language-list,
-    .step-list,
-    .output-list {
+    /* Numeric inputs */
+    .number-row {
       display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
 
-    .draft-card,
-    .queue-card,
-    .step-card,
-    .output-card {
-      background: var(--surface-strong);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 14px;
+    .field {
+      display: grid;
+      gap: 6px;
     }
 
-    @media (prefers-color-scheme: dark) {
-      .draft-card,
-      .queue-card,
-      .step-card,
-      .output-card {
-        background: rgba(255, 255, 255, 0.03);
-      }
-    }
-
-    .draft-card strong,
-    .queue-card strong,
-    .step-card strong,
-    .output-card strong {
-      display: block;
-      font-size: 15px;
-      line-height: 1.3;
-      margin-bottom: 4px;
-    }
-
-    .draft-card p,
-    .queue-card p,
-    .step-card p,
-    .output-card p,
-    .support-card p {
-      margin: 0;
+    .field label {
+      font: 800 12px/1 "Nunito", sans-serif;
       color: var(--muted);
-      font-size: 13px;
-      line-height: 1.48;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
 
-    .draft-meta,
-    .queue-meta {
-      margin-top: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
+    .field input {
+      appearance: none;
+      border: 1.5px solid var(--line);
+      background: var(--surface);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      font: 700 18px/1 "Nunito", sans-serif;
+      color: var(--text);
+      width: 100%;
     }
 
-    .tag {
+    .area-badge {
+      align-self: start;
       display: inline-flex;
       align-items: center;
-      min-height: 30px;
-      padding: 0 10px;
+      gap: 6px;
+      padding: 8px 14px;
       border-radius: 999px;
-      font-size: 12px;
-      font-weight: 800;
-      background: var(--blue-soft);
-      color: var(--blue-text);
-    }
-
-    .tag-soft {
-      background: rgba(22, 129, 87, 0.1);
+      background: var(--surface-soft);
+      border: 1px solid var(--line);
+      font: 800 14px/1 "Nunito", sans-serif;
       color: var(--green-strong);
     }
 
-    .language-list {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+    /* Stepper */
+    .stepper {
+      display: inline-grid;
+      grid-template-columns: 44px 60px 44px;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface);
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 6px;
+      width: fit-content;
     }
 
-    .language-card {
-      min-height: 94px;
-      border-radius: 18px;
-      padding: 12px;
-      background: var(--surface-strong);
+    .stepper button {
+      appearance: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
       border: 1px solid var(--line);
+      background: var(--surface-soft);
+      font: 900 20px/1 "Nunito", sans-serif;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .stepper .count {
+      text-align: center;
+      font: 900 22px/1 "Nunito", sans-serif;
+    }
+
+    .stepper-row {
       display: grid;
       gap: 8px;
-      align-content: start;
     }
 
-    @media (prefers-color-scheme: dark) {
-      .language-card {
-        background: rgba(255, 255, 255, 0.03);
-      }
-    }
-
-    .language-card.active {
-      border-color: rgba(22, 129, 87, 0.34);
-      box-shadow: inset 0 0 0 2px rgba(22, 129, 87, 0.08);
-    }
-
-    .language-card strong {
-      font: 800 14px/1.1 "Nunito", sans-serif;
-    }
-
-    .language-card span {
+    .stepper-aux {
       color: var(--muted);
-      font-size: 12px;
-      line-height: 1.4;
+      font-size: 13px;
     }
 
-    .step-card {
-      display: grid;
-      grid-template-columns: 40px 1fr;
-      gap: 12px;
-      align-items: start;
-    }
-
-    .step-number {
-      width: 40px;
-      height: 40px;
-      border-radius: 16px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(180deg, var(--gold) 0%, var(--orange) 100%);
-      color: #fff;
-      font: 900 16px/1 "Nunito", sans-serif;
-      box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.08);
-    }
-
-    .output-card {
+    /* Compass */
+    .compass {
+      width: 200px;
+      height: 200px;
+      margin: 4px auto 0;
       position: relative;
-      overflow: hidden;
-    }
-
-    .output-card::after {
-      content: "";
-      position: absolute;
-      right: -28px;
-      top: -28px;
-      width: 86px;
-      height: 86px;
       border-radius: 999px;
-      background: rgba(243, 187, 72, 0.12);
-    }
-
-    .support-grid {
+      border: 1.5px dashed var(--line-strong);
       display: grid;
-      gap: 14px;
-      margin-top: 22px;
+      place-items: center;
     }
 
-    .support-card {
+    .compass-arrow {
+      position: absolute;
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      border: 1.5px solid var(--line);
       background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 26px;
-      padding: 20px;
-      box-shadow: var(--shadow-soft);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      color: var(--text);
+      font: 900 14px/1 "Nunito", sans-serif;
     }
 
-    .support-card h3,
-    .showcase-copy h3 {
-      margin: 0 0 10px;
-      font: 900 28px/0.98 "Nunito", sans-serif;
-      letter-spacing: -0.04em;
+    .compass-arrow.selected {
+      border-color: var(--green);
+      background: var(--selected-bg);
+      color: var(--green-strong);
     }
 
-    .stat-grid {
+    .compass-arrow.n { top: 4px; left: 50%; transform: translateX(-50%); }
+    .compass-arrow.s { bottom: 4px; left: 50%; transform: translateX(-50%); }
+    .compass-arrow.e { right: 4px; top: 50%; transform: translateY(-50%); }
+    .compass-arrow.w { left: 4px; top: 50%; transform: translateY(-50%); }
+
+    /* Crops grid */
+    .crops-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 14px;
-    }
-
-    .stat {
-      min-height: 106px;
-      border-radius: 20px;
-      padding: 14px;
-      background: var(--surface-strong);
-      border: 1px solid var(--line);
-      display: grid;
-      align-content: start;
       gap: 8px;
     }
 
-    .stat strong {
-      font: 900 30px/0.95 "Nunito", sans-serif;
-      letter-spacing: -0.04em;
-    }
-
-    .stat span {
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.45;
-    }
-
-    .showcase-copy {
+    /* Photo placeholder */
+    .photo-placeholder {
+      min-height: 120px;
+      border: 1.5px dashed var(--line-strong);
+      border-radius: var(--radius-md);
       display: grid;
-      gap: 14px;
-      align-content: start;
+      place-items: center;
+      color: var(--muted);
+      font: 700 14px/1.3 "Nunito", sans-serif;
+      cursor: pointer;
+      background: var(--surface-soft);
     }
 
-    .principles {
+    /* Bottom CTA bar */
+    .cta-bar {
+      padding: 14px 20px 22px;
+      background: var(--bg);
+      border-top: 1px solid var(--line);
       display: grid;
-      gap: 10px;
+      grid-template-columns: 1fr;
+      gap: 6px;
+      align-items: center;
     }
 
-    .principle {
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      padding: 14px 16px;
-      box-shadow: var(--shadow-soft);
-    }
-
-    .principle strong {
-      display: block;
-      margin-bottom: 4px;
-      font: 800 15px/1.2 "Nunito", sans-serif;
-    }
-
-    .principle span {
+    .cta-meta {
+      font-size: 12px;
       color: var(--muted);
-      font-size: 13px;
-      line-height: 1.46;
+      text-align: right;
+      min-height: 14px;
     }
 
-    .site-footer {
-      margin-top: 28px;
-      padding: 16px 0 0;
+    .cta {
+      appearance: none;
+      border: 0;
+      cursor: pointer;
+      width: 100%;
+      min-height: 56px;
+      border-radius: 18px;
+      background: var(--green);
+      color: #f5fff9;
+      font: 900 17px/1 "Nunito", sans-serif;
+      letter-spacing: -0.01em;
+      box-shadow: var(--shadow-cta);
+    }
+
+    .cta:disabled {
+      background: var(--line-strong);
       color: var(--muted);
-      font-size: 13px;
-      line-height: 1.5;
+      box-shadow: none;
+      cursor: not-allowed;
     }
 
-    [contenteditable="true"] {
-      cursor: text;
+    .cta:not(:disabled):hover,
+    .cta:not(:disabled):focus-visible {
+      transform: translateY(-1px);
     }
 
+    /* Toast */
+    .toast {
+      position: absolute;
+      left: 50%;
+      bottom: 100px;
+      transform: translateX(-50%) translateY(8px);
+      background: var(--text);
+      color: var(--bg);
+      padding: 10px 16px;
+      border-radius: 999px;
+      font: 800 13px/1 "Nunito", sans-serif;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms ease, transform 200ms ease;
+      z-index: 5;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Pretext */
     [data-pretext] {
       display: block;
       height: auto;
       contain: layout style;
     }
 
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
-
-    @media (min-width: 376px) {
-      .app-header {
-        padding-left: 20px;
-        padding-right: 20px;
-      }
-
-      .panel-stack {
-        padding-left: 20px;
-        padding-right: 20px;
-      }
-    }
-
-    @media (min-width: 768px) {
-      .hero {
-        grid-template-columns: minmax(0, 0.98fr) minmax(360px, 0.82fr);
-        gap: 30px;
-      }
-
-      .showcase {
-        grid-template-columns: minmax(360px, 440px) minmax(0, 1fr);
-        gap: 28px;
-      }
-
-      .support-grid {
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      }
-    }
-
-    @media (min-width: 1024px) {
-      .page {
-        padding-top: 26px;
-      }
-
-      .hero {
-        gap: 44px;
-      }
-
-      .showcase-copy {
-        padding-top: 12px;
-      }
-    }
-
-    @media (min-width: 1440px) {
-      .page {
-        padding-left: 28px;
-        padding-right: 28px;
-      }
-
-      .showcase {
-        gap: 42px;
-      }
-    }
-
+    /* Reduced motion */
     @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
+      *, *::before, *::after {
         animation: none !important;
         transition: none !important;
-        scroll-behavior: auto !important;
       }
+    }
+
+    /* Small phones */
+    @media (max-width: 360px) {
+      .tile-row, .crops-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
   </style>
 </head>
 <body>
-  <header class="site-header" aria-label="Project header">
-    <a href="#app-preview" class="brand" aria-label="FRADI Drip Planner home">
-      <span class="brand-mark" aria-hidden="true"></span>
-      <span class="brand-copy">
-        <strong>FRADI Drip Planner</strong>
-        <span>Offline field intake for custom recycled-plastic irrigation</span>
-      </span>
-    </a>
-    <div class="header-actions">
-      <div class="status-pill"><span class="status-dot" aria-hidden="true"></span>Ready offline</div>
-      <div class="mini-pill">Last sync 07:12</div>
-    </div>
-  </header>
+  <div class="phone-shell">
+    <section class="app" id="app">
+      <header class="top-bar">
+        <button class="back-btn" id="backBtn" aria-label="Go back">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+        </button>
+        <div class="progress-label" id="progressLabel">Step 1 of 7</div>
+        <span style="width:40px"></span>
+      </header>
 
-  <main class="page">
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-copy">
-        <div class="eyebrow">Garden Companion Final</div>
-        <h1 id="hero-title" data-pretext contenteditable="true">Make the first step obvious for the worker and the gardener.</h1>
-        <p class="lede" data-pretext contenteditable="true">
-          This direction keeps the product operationally serious, but removes language friction fast. The worker sees sync status, drafts, outputs, and workshop queue immediately. The gardener looking over their shoulder sees large icons, clear labels, and a visible path from intake to finished irrigation plan.
-        </p>
-        <div class="hero-actions">
-          <a class="button button-primary" href="#app-preview">View mobile screen</a>
-          <a class="button button-secondary" href="#implementation-notes">Why this works</a>
-        </div>
-        <div class="hero-meta" aria-label="Design highlights">
-          <div class="mini-pill">Pictogram-first</div>
-          <div class="mini-pill">Multilingual-aware</div>
-          <div class="mini-pill">Field-ready contrast</div>
-          <div class="mini-pill">2 PDF outputs visible</div>
-        </div>
-      </div>
+      <div class="screen-body">
 
-      <div class="support-card">
-        <h3 data-pretext contenteditable="true">Screen intent</h3>
-        <p data-pretext contenteditable="true">
-          The home screen has one dominant action: start a new intake. Everything else exists to lower hesitation before the tap. Status is immediate, recent work is resumable, and the workshop handoff is visible enough that the product does not read like a generic survey app.
-        </p>
-        <div class="stat-grid" aria-label="Design checkpoints">
-          <div class="stat">
-            <strong data-pretext contenteditable="true">44px+</strong>
-            <span data-pretext contenteditable="true">Every tap target clears the mobile floor for field use.</span>
-          </div>
-          <div class="stat">
-            <strong data-pretext contenteditable="true">6 steps</strong>
-            <span data-pretext contenteditable="true">The intake promise is concrete enough to feel finishable.</span>
-          </div>
-          <div class="stat">
-            <strong data-pretext contenteditable="true">2 outputs</strong>
-            <span data-pretext contenteditable="true">Gardener guide plus workshop build sheet stay visible in the UX story.</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="showcase" id="app-preview" aria-labelledby="mobile-preview-title">
-      <div class="phone-shell" aria-hidden="true">
-        <section class="app">
-          <header class="app-header">
-            <div class="app-bar">
-              <div class="label">FRADI Drip Planner</div>
-              <div class="offline-chip"><span class="status-dot" aria-hidden="true"></span>Ready offline</div>
+        <!-- Screen 1: Plot size -->
+        <section class="screen" data-screen="1" data-key="size">
+          <h2 class="title" data-pretext>How big is the plot?</h2>
+          <p class="helper" data-pretext>Estimate is fine. The worker can pace it out with the gardener.</p>
+          <div class="number-row">
+            <div class="field">
+              <label for="lengthInput">Length (m)</label>
+              <input id="lengthInput" type="number" min="0" step="0.5" inputmode="decimal" placeholder="4" />
             </div>
-
-            <div class="hero-panel">
-              <div class="hero-visual">
-                <div class="icon-tile" aria-hidden="true"></div>
-                <div>
-                  <h2 data-pretext contenteditable="true">Start a new garden plan</h2>
-                  <p data-pretext contenteditable="true">Answer six quick questions. This makes one picture guide for the gardener and one build sheet for the FRADI workshop.</p>
-                </div>
-              </div>
-
-              <a href="#recent-drafts" class="button button-primary app-cta">Start new intake</a>
-
-              <div class="quick-grid" aria-label="Key shortcuts">
-                <div class="quick-card">
-                  <span class="quick-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24"><path d="M7 18h10"/><path d="M5 6h14"/><path d="M7 12h7"/><path d="M5 6l2 12"/><path d="M19 6l-2 12"/></svg>
-                  </span>
-                  <strong>Garden + crops</strong>
-                  <span data-pretext contenteditable="true">Plot size, water, and crop choices in one guided flow.</span>
-                </div>
-                <div class="quick-card">
-                  <span class="quick-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24"><path d="M5 5h14v10H5z"/><path d="M8 19h8"/><path d="M12 15v4"/><path d="M8 9h8"/><path d="M8 12h5"/></svg>
-                  </span>
-                  <strong>2 PDF outputs</strong>
-                  <span data-pretext contenteditable="true">One guide for the gardener. One build sheet for the workshop.</span>
-                </div>
-              </div>
+            <div class="field">
+              <label for="widthInput">Width (m)</label>
+              <input id="widthInput" type="number" min="0" step="0.5" inputmode="decimal" placeholder="3" />
             </div>
-          </header>
+          </div>
+          <div class="area-badge" id="areaBadge">≈ 0 m²</div>
+        </section>
 
-          <div class="panel-stack">
-            <section class="panel" id="recent-drafts" aria-labelledby="recent-drafts-title">
-              <div class="panel-head">
-                <strong id="recent-drafts-title"><span class="icon-badge" aria-hidden="true">
-                  <svg viewBox="0 0 24 24"><path d="M7 17c2.5 0 4.5-2.2 4.5-4.8V4.5"/><path d="M7 17c0-2.7 2.2-4.8 4.8-4.8H20"/><path d="M7 17c0 1.7-1.2 3-2.8 3S1.5 18.7 1.5 17s1.1-2.8 2.7-2.8c.8 0 1.6.3 2.1.8"/></svg>
-                </span>Recent drafts</strong>
-                <a class="linkish" href="/">See all</a>
-              </div>
-              <div class="draft-list">
-                <article class="draft-card">
-                  <strong data-pretext contenteditable="true">Hawa Abdulrahman Mohammed Idris</strong>
-                  <p data-pretext contenteditable="true">Tomato and kale beds. Saved 22 minutes ago after plot photo and water source check.</p>
-                  <div class="draft-meta">
-                    <span class="tag">Swahili output</span>
-                    <span class="tag tag-soft">Ready to finish</span>
-                  </div>
-                </article>
-                <article class="draft-card">
-                  <strong data-pretext contenteditable="true">Maryan Ali Hassan</strong>
-                  <p data-pretext contenteditable="true">Need final crop selection before generating the workshop build sheet.</p>
-                  <div class="draft-meta">
-                    <span class="tag">English intake</span>
-                    <span class="tag tag-soft">Water source pending</span>
-                  </div>
-                </article>
-              </div>
-            </section>
+        <!-- Screen 2: Soil, slope, water direction -->
+        <section class="screen" data-screen="2" data-key="ground">
+          <h2 class="title" data-pretext>Soil, slope, and water direction</h2>
+          <p class="helper" data-pretext>Three quick reads of the ground. Pictograms first, words second.</p>
 
-            <section class="panel" aria-labelledby="queue-title">
-              <div class="panel-head">
-                <strong id="queue-title"><span class="icon-badge" aria-hidden="true">
-                  <svg viewBox="0 0 24 24"><path d="M12 3v6"/><path d="M12 15v6"/><path d="M4.5 7.5l4.2 2.4"/><path d="M15.3 14.1l4.2 2.4"/><path d="M4.5 16.5l4.2-2.4"/><path d="M15.3 9.9l4.2-2.4"/><circle cx="12" cy="12" r="3.4"/></svg>
-                </span>Workshop queue</strong>
-                <span class="linkish">2 ready today</span>
-              </div>
-              <div class="queue-list">
-                <article class="queue-card">
-                  <strong data-pretext contenteditable="true">2 build sheets ready</strong>
-                  <p data-pretext contenteditable="true">Total tubing 34 m. One dripper mold change needed before the afternoon run.</p>
-                </article>
-                <article class="queue-card">
-                  <strong data-pretext contenteditable="true">Last sync from office at 07:12</strong>
-                  <p data-pretext contenteditable="true">Three field records still saved locally. Safe to continue offline.</p>
-                </article>
-              </div>
-            </section>
+          <div class="row-group">
+            <div class="row-label">Soil</div>
+            <div class="tile-row" data-single="soil">
+              <button class="tile" data-value="sandy">
+                <span class="tile-icon"><svg viewBox="0 0 24 24"><circle cx="6" cy="14" r="1.2"/><circle cx="10" cy="17" r="1.2"/><circle cx="14" cy="13" r="1.2"/><circle cx="18" cy="16" r="1.2"/><circle cx="9" cy="11" r="1.2"/><circle cx="15" cy="9" r="1.2"/></svg></span>
+                <span class="tile-label">Sandy</span>
+              </button>
+              <button class="tile" data-value="loamy">
+                <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M3 16h18"/><path d="M5 12c1.5-2 3-2 4 0s2.5 2 4 0 3-2 4 0 2.5 2 3 0"/></svg></span>
+                <span class="tile-label">Loamy</span>
+              </button>
+              <button class="tile" data-value="rocky">
+                <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M4 17l3-5 3 5"/><path d="M10 17l4-7 4 7"/><path d="M3 17h18"/></svg></span>
+                <span class="tile-label">Rocky</span>
+              </button>
+            </div>
+          </div>
 
-            <section class="panel" aria-labelledby="language-title">
-              <div class="panel-head">
-                <strong id="language-title"><span class="icon-badge" aria-hidden="true">
-                  <svg viewBox="0 0 24 24"><path d="M12 3c4.8 0 8.7 4 8.7 9s-3.9 9-8.7 9-8.7-4-8.7-9 3.9-9 8.7-9Z"/><path d="M3.8 9h16.4"/><path d="M3.8 15h16.4"/><path d="M12 3c2 2.2 3.2 5.5 3.2 9S14 18.8 12 21"/><path d="M12 3c-2 2.2-3.2 5.5-3.2 9S10 18.8 12 21"/></svg>
-                </span>Language</strong>
-                <span class="linkish">Change at intake</span>
-              </div>
-              <div class="language-list" aria-label="Language selection">
-                <div class="language-card active">
-                  <strong>English</strong>
-                  <span data-pretext contenteditable="true">Worker UI</span>
-                </div>
-                <div class="language-card">
-                  <strong>Swahili</strong>
-                  <span data-pretext contenteditable="true">Gardener guide</span>
-                </div>
-                <div class="language-card">
-                  <strong>Somali</strong>
-                  <span data-pretext contenteditable="true">Gardener guide</span>
-                </div>
-              </div>
-            </section>
+          <div class="row-group">
+            <div class="row-label">Slope</div>
+            <div class="tile-row" data-single="slope">
+              <button class="tile" data-value="flat">
+                <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M3 17h18"/></svg></span>
+                <span class="tile-label">Flat</span>
+              </button>
+              <button class="tile" data-value="gentle">
+                <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M3 17l18-7"/></svg></span>
+                <span class="tile-label">Gentle</span>
+              </button>
+              <button class="tile" data-value="steep">
+                <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M4 19l16-14"/></svg></span>
+                <span class="tile-label">Steep</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="row-group">
+            <div class="row-label">Which direction does water flow toward the plot?</div>
+            <div class="compass" role="radiogroup" aria-label="Water flow direction">
+              <button class="compass-arrow n" data-compass="N" aria-label="North">N</button>
+              <button class="compass-arrow s" data-compass="S" aria-label="South">S</button>
+              <button class="compass-arrow e" data-compass="E" aria-label="East">E</button>
+              <button class="compass-arrow w" data-compass="W" aria-label="West">W</button>
+            </div>
           </div>
         </section>
+
+        <!-- Screen 3: Water source -->
+        <section class="screen" data-screen="3" data-key="water">
+          <h2 class="title" data-pretext>Where is the water?</h2>
+          <p class="helper" data-pretext>Source, distance, and height shape what tubing and pressure the workshop builds.</p>
+
+          <div class="row-group">
+            <div class="row-label">Source</div>
+            <div class="tile-row" data-single="source">
+              <button class="tile" data-value="jerrycan">
+                <span class="tile-icon"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="14" rx="1.5"/><path d="M9 6V4h6v2"/><path d="M18 10h2v3h-2"/></svg></span>
+                <span class="tile-label">Jerrycan</span>
+              </button>
+              <button class="tile" data-value="tap">
+                <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M5 9h7v3H5z"/><path d="M12 10h6"/><path d="M18 8v4"/><path d="M8 12v4l-1 4h4l-1-4v-4"/></svg></span>
+                <span class="tile-label">Tap</span>
+              </button>
+              <button class="tile" data-value="rain-barrel">
+                <span class="tile-icon"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="6" ry="2"/><path d="M6 6v12c0 1.1 2.7 2 6 2s6-.9 6-2V6"/><path d="M6 12c0 1.1 2.7 2 6 2s6-.9 6-2"/></svg></span>
+                <span class="tile-label">Rain barrel</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="row-group">
+            <div class="row-label">Distance</div>
+            <div class="tile-row" data-single="distance">
+              <button class="tile" data-value="next">
+                <span class="tile-icon"><svg viewBox="0 0 24 24"><circle cx="8" cy="12" r="2"/><circle cx="16" cy="12" r="2"/><path d="M10 12h4"/></svg></span>
+                <span class="tile-label">Next to plot</span>
+              </button>
+              <button class="tile" data-value="few">
+                <span class="tile-icon"><svg viewBox="0 0 24 24"><circle cx="6" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="18" cy="12" r="1.6"/></svg></span>
+                <span class="tile-label">Few steps</span>
+              </button>
+              <button class="tile" data-value="far">
+                <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M3 12h18"/><path d="M17 8l4 4-4 4"/></svg></span>
+                <span class="tile-label">Carry far</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="row-group">
+            <div class="row-label">Height vs plot</div>
+            <div class="tile-row" data-single="height">
+              <button class="tile" data-value="below">
+                <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M12 4v14"/><path d="M7 13l5 5 5-5"/></svg></span>
+                <span class="tile-label">Below</span>
+              </button>
+              <button class="tile" data-value="level">
+                <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M4 12h16"/></svg></span>
+                <span class="tile-label">Level</span>
+              </button>
+              <button class="tile" data-value="above">
+                <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M12 20V6"/><path d="M7 11l5-5 5 5"/></svg></span>
+                <span class="tile-label">Above</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="row-group stepper-row">
+            <div class="row-label">How many jerry cans per day?</div>
+            <div class="stepper" data-stepper="cans" data-min="0" data-max="40">
+              <button data-step="-1" aria-label="Decrease">−</button>
+              <div class="count" data-count>0</div>
+              <button data-step="1" aria-label="Increase">+</button>
+            </div>
+            <div class="stepper-aux" id="cansLitres">≈ 0 litres</div>
+          </div>
+        </section>
+
+        <!-- Screen 4: Water clarity -->
+        <section class="screen" data-screen="4" data-key="clarity">
+          <h2 class="title" data-pretext>Is the water clear?</h2>
+          <p class="helper" data-pretext>Sediment can block drippers — the plan accounts for this.</p>
+          <div class="tile-row" data-single="clarity">
+            <button class="tile" data-value="clear">
+              <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M12 4c-3 5-5 8-5 11a5 5 0 0 0 10 0c0-3-2-6-5-11z"/></svg></span>
+              <span class="tile-label">Clear</span>
+            </button>
+            <button class="tile" data-value="slightly-cloudy">
+              <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M12 4c-3 5-5 8-5 11a5 5 0 0 0 10 0c0-3-2-6-5-11z"/><path d="M9 14c1 .8 2 .8 3 0s2-.8 3 0"/></svg></span>
+              <span class="tile-label">Slightly cloudy</span>
+            </button>
+            <button class="tile" data-value="murky">
+              <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M12 4c-3 5-5 8-5 11a5 5 0 0 0 10 0c0-3-2-6-5-11z"/><path d="M8 13c.8.6 1.6.6 2.4 0s1.6-.6 2.4 0 1.6.6 2.4 0"/><path d="M8 16c.8.6 1.6.6 2.4 0s1.6-.6 2.4 0 1.6.6 2.4 0"/></svg></span>
+              <span class="tile-label">Murky</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- Screen 5: Water tank -->
+        <section class="screen" data-screen="5" data-key="tank">
+          <h2 class="title" data-pretext>Do you have a water tank?</h2>
+          <p class="helper" data-pretext>A tank lets the system run on gravity instead of constant carrying.</p>
+          <div class="tile-row" data-single="tankType">
+            <button class="tile" data-value="none">
+              <span class="tile-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M6 18l12-12"/></svg></span>
+              <span class="tile-label">No tank</span>
+            </button>
+            <button class="tile" data-value="small">
+              <span class="tile-icon"><svg viewBox="0 0 24 24"><rect x="8" y="6" width="8" height="12" rx="1.5"/><path d="M8 14h8"/></svg></span>
+              <span class="tile-label">Small (&lt;200 L)</span>
+            </button>
+            <button class="tile" data-value="large">
+              <span class="tile-icon"><svg viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="16" rx="2"/><path d="M5 12h14"/><path d="M5 16h14"/></svg></span>
+              <span class="tile-label">Large (200 L+)</span>
+            </button>
+          </div>
+          <div class="row-group stepper-row" id="tankCapacityRow" hidden>
+            <div class="row-label">Tank capacity (litres)</div>
+            <div class="stepper" data-stepper="tankLitres" data-min="0" data-max="5000" data-step-size="50">
+              <button data-step="-1" aria-label="Decrease">−</button>
+              <div class="count" data-count>0</div>
+              <button data-step="1" aria-label="Increase">+</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Screen 6: Crops -->
+        <section class="screen" data-screen="6" data-key="crops">
+          <h2 class="title" data-pretext>What will you grow?</h2>
+          <p class="helper" data-pretext>Pick everything the gardener wants. Tap to toggle.</p>
+          <div class="crops-grid" data-multi="crops">
+            <button class="tile" data-value="sukuma">
+              <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M12 4c-4 0-7 3-7 7 0 3 2 5 7 9 5-4 7-6 7-9 0-4-3-7-7-7z"/><path d="M12 11v9"/></svg></span>
+              <span class="tile-label">Sukuma wiki</span>
+            </button>
+            <button class="tile" data-value="tomato">
+              <span class="tile-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="14" r="6"/><path d="M9 8c1 1 5 1 6 0"/><path d="M12 8V6"/></svg></span>
+              <span class="tile-label">Tomato</span>
+            </button>
+            <button class="tile" data-value="kale">
+              <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M12 4c-3 2-5 5-5 9s2 6 5 6 5-2 5-6-2-7-5-9z"/><path d="M12 19V8"/></svg></span>
+              <span class="tile-label">Kale</span>
+            </button>
+            <button class="tile" data-value="onion">
+              <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M12 8c-3 0-5 2-5 6s2 6 5 6 5-2 5-6-2-6-5-6z"/><path d="M10 8l2-4 2 4"/></svg></span>
+              <span class="tile-label">Onion</span>
+            </button>
+            <button class="tile" data-value="amaranth">
+              <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M12 4v16"/><path d="M12 8c2-1 4-1 5 1"/><path d="M12 12c-2-1-4-1-5 1"/><path d="M12 16c2-1 4-1 5 1"/></svg></span>
+              <span class="tile-label">Amaranth</span>
+            </button>
+            <button class="tile" data-value="spinach">
+              <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M5 12c2-5 5-7 7-7s5 2 7 7c-2 5-5 7-7 7s-5-2-7-7z"/><path d="M5 12h14"/></svg></span>
+              <span class="tile-label">Spinach</span>
+            </button>
+            <button class="tile" data-value="carrot">
+              <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M12 8l-4 12 8-2z"/><path d="M12 8l2-4"/><path d="M12 8l-2-4"/></svg></span>
+              <span class="tile-label">Carrot</span>
+            </button>
+            <button class="tile" data-value="pepper">
+              <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M9 8c0-2 2-4 4-4 1 2 2 3 4 3-1 3-2 5-4 5-3 0-4-2-4-4z"/><path d="M11 12c-3 1-5 4-5 7"/></svg></span>
+              <span class="tile-label">Pepper</span>
+            </button>
+            <button class="tile" data-value="beans">
+              <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M8 6c4 0 8 3 8 8 0 3-2 4-4 4-4 0-8-3-8-8 0-3 2-4 4-4z"/></svg></span>
+              <span class="tile-label">Beans</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- Screen 7: Confirm -->
+        <section class="screen" data-screen="7" data-key="confirm">
+          <h2 class="title" data-pretext>Confirm and finish</h2>
+          <p class="helper" data-pretext>The gardener's name and language go on the printed guide. The photo helps the workshop.</p>
+
+          <div class="field">
+            <label for="nameInput">Gardener name</label>
+            <input id="nameInput" type="text" placeholder="Hawa Abdulrahman" />
+          </div>
+
+          <div class="row-group">
+            <div class="row-label">Gardener language</div>
+            <div class="tile-row" data-single="language">
+              <button class="tile" data-value="swahili">
+                <span class="tile-label">Swahili</span>
+              </button>
+              <button class="tile" data-value="arabic">
+                <span class="tile-label">Arabic</span>
+              </button>
+              <button class="tile" data-value="somali">
+                <span class="tile-label">Somali</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="row-group">
+            <div class="row-label">Plot photo</div>
+            <button class="photo-placeholder" type="button">Tap to add photo</button>
+          </div>
+        </section>
+
       </div>
 
-      <div class="showcase-copy" id="implementation-notes">
-        <div>
-          <div class="eyebrow">Implementation Notes</div>
-          <h3 id="mobile-preview-title" data-pretext contenteditable="true">Why this is the strongest version of Garden Companion</h3>
-          <p class="lede" data-pretext contenteditable="true">
-            The original concept risked becoming too friendly. This version fixes that by anchoring every bright, accessible piece of UI to an operational fact: offline safety, draft recovery, language selection, and workshop readiness.
-          </p>
-        </div>
+      <footer class="cta-bar">
+        <div class="cta-meta" id="ctaMeta"></div>
+        <button class="cta" id="ctaBtn" type="button">Continue</button>
+      </footer>
 
-        <div class="principles">
-          <div class="principle">
-            <strong>One dominant action</strong>
-            <span data-pretext contenteditable="true">The start button owns the screen. That matches the real field task: begin the interview fast without scanning a dashboard.</span>
-          </div>
-          <div class="principle">
-            <strong>Shared-view clarity</strong>
-            <span data-pretext contenteditable="true">Large icon blocks and plain labels make sense even when the gardener is only glancing over the worker’s shoulder.</span>
-          </div>
-          <div class="principle">
-            <strong>Manufacturing stays visible</strong>
-            <span data-pretext contenteditable="true">The queue and the two-output story stop this from reading like a generic data collection form.</span>
-          </div>
-        </div>
-
-        <section class="support-card" aria-labelledby="steps-title">
-          <h3 id="steps-title" data-pretext contenteditable="true">The six-step promise</h3>
-          <div class="step-list">
-            <article class="step-card">
-              <span class="step-number" aria-hidden="true">1</span>
-              <div>
-                <strong data-pretext contenteditable="true">Plot size and shape</strong>
-                <p data-pretext contenteditable="true">Let the worker anchor the conversation with something visible and concrete.</p>
-              </div>
-            </article>
-            <article class="step-card">
-              <span class="step-number" aria-hidden="true">2</span>
-              <div>
-                <strong data-pretext contenteditable="true">Sun, slope, and soil</strong>
-                <p data-pretext contenteditable="true">Use pictorial choices instead of typed description wherever possible.</p>
-              </div>
-            </article>
-            <article class="step-card">
-              <span class="step-number" aria-hidden="true">3</span>
-              <div>
-                <strong data-pretext contenteditable="true">Water source and distance</strong>
-                <p data-pretext contenteditable="true">This is where the buildability story becomes real, so it deserves visible weight.</p>
-              </div>
-            </article>
-          </div>
-        </section>
-
-        <section class="support-card" aria-labelledby="outputs-title">
-          <h3 id="outputs-title" data-pretext contenteditable="true">Outputs the user can trust</h3>
-          <div class="output-list">
-            <article class="output-card">
-              <strong data-pretext contenteditable="true">Gardener guide</strong>
-              <p data-pretext contenteditable="true">A single-page visual PDF in the gardener’s language, built for print or phone handoff.</p>
-            </article>
-            <article class="output-card">
-              <strong data-pretext contenteditable="true">Workshop build sheet</strong>
-              <p data-pretext contenteditable="true">Technical tubing, dripper, and machine settings calibrated to FRADI’s real extrusion and molding workflow.</p>
-            </article>
-          </div>
-        </section>
-      </div>
+      <div class="toast" id="toast" role="status" aria-live="polite">Saved on device</div>
     </section>
+  </div>
 
-    <footer class="site-footer">
-      Built as a standalone `design-html` artifact for the FRADI worker-facing intake start screen. Edit any highlighted text inline if you want to refine copy; the layout reflows automatically.
-    </footer>
-  </main>
+  <script>
+    // ---------- Screen routing ----------
+    const TOTAL = 7;
+    const screens = Array.from(document.querySelectorAll('.screen'));
+    const backBtn = document.getElementById('backBtn');
+    const progressLabel = document.getElementById('progressLabel');
+    const ctaBtn = document.getElementById('ctaBtn');
+    const ctaMeta = document.getElementById('ctaMeta');
+    const toast = document.getElementById('toast');
 
-  <script type="module">
-    import { prepare, layout } from 'https://esm.sh/@chenglou/pretext';
+    const state = {
+      size: { length: null, width: null },
+      ground: { soil: null, slope: null, direction: null },
+      water: { source: null, distance: null, height: null, cans: 0 },
+      clarity: null,
+      tank: { type: null, litres: 0 },
+      crops: new Set(),
+      confirm: { name: '', language: null }
+    };
 
-    const prepared = new Map();
-    const observers = [];
+    let currentScreen = 1;
 
-    function parseLineHeight(style) {
-      const raw = style.lineHeight;
-      if (raw === 'normal') {
-        return Math.round(parseFloat(style.fontSize) * 1.4);
+    function readHash() {
+      const m = (location.hash || '').match(/^#step-(\d+)$/);
+      const n = m ? parseInt(m[1], 10) : 1;
+      return Math.min(Math.max(n, 1), TOTAL);
+    }
+
+    function writeHash(n) {
+      const target = `#step-${n}`;
+      if (location.hash !== target) {
+        history.replaceState(null, '', target);
       }
-      return parseFloat(raw);
     }
 
-    function currentBreakpoint(width) {
-      if (width >= 1440) return 'xl';
-      if (width >= 1024) return 'lg';
-      if (width >= 768) return 'md';
-      if (width >= 376) return 'sm';
-      return 'xs';
+    function show(n) {
+      currentScreen = n;
+      screens.forEach(s => s.classList.toggle('active', Number(s.dataset.screen) === n));
+      progressLabel.textContent = `Step ${n} of ${TOTAL}`;
+      backBtn.disabled = n === 1;
+      writeHash(n);
+      updateCta();
+      // Scroll body to top of new screen
+      const body = document.querySelector('.screen-body');
+      if (body) body.scrollTop = 0;
     }
 
-    function prepareElement(el) {
-      const style = getComputedStyle(el);
-      const text = el.textContent ?? '';
-      prepared.set(el, {
-        handle: prepare(text, style.font),
-        lineHeight: parseLineHeight(style)
-      });
-    }
-
-    function relayout() {
-      for (const [el, value] of prepared.entries()) {
-        const width = el.clientWidth;
-        if (!width) continue;
-        const result = layout(value.handle, width, value.lineHeight);
-        el.style.height = `${result.height}px`;
+    function next() {
+      if (currentScreen >= TOTAL) {
+        // Loop: show toast and return to screen 1
+        showToast();
+        // Reset selections so the demo stays clickable
+        resetState();
+        show(1);
+        return;
       }
-      document.documentElement.dataset.breakpoint = currentBreakpoint(window.innerWidth);
+      show(currentScreen + 1);
     }
 
-    async function boot() {
-      await document.fonts.ready;
+    function prev() {
+      if (currentScreen > 1) show(currentScreen - 1);
+    }
 
-      const nodes = document.querySelectorAll('[data-pretext]');
-      nodes.forEach((el) => prepareElement(el));
+    function showToast() {
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 1800);
+    }
 
-      const resizeObserver = new ResizeObserver(() => relayout());
-      resizeObserver.observe(document.body);
-      observers.push(resizeObserver);
+    function resetState() {
+      state.size = { length: null, width: null };
+      state.ground = { soil: null, slope: null, direction: null };
+      state.water = { source: null, distance: null, height: null, cans: 0 };
+      state.clarity = null;
+      state.tank = { type: null, litres: 0 };
+      state.crops = new Set();
+      state.confirm = { name: '', language: null };
+      // Clear UI
+      document.querySelectorAll('.tile.selected, .compass-arrow.selected').forEach(el => el.classList.remove('selected'));
+      document.querySelectorAll('input').forEach(i => { i.value = ''; });
+      document.querySelectorAll('[data-count]').forEach(c => { c.textContent = '0'; });
+      document.getElementById('areaBadge').textContent = '≈ 0 m²';
+      document.getElementById('cansLitres').textContent = '≈ 0 litres';
+      document.getElementById('tankCapacityRow').hidden = true;
+    }
 
-      for (const el of nodes) {
-        if (el.contentEditable === 'true') {
-          const mutationObserver = new MutationObserver(() => {
-            prepareElement(el);
-            relayout();
-          });
-          mutationObserver.observe(el, {
-            characterData: true,
-            childList: true,
-            subtree: true
-          });
-          observers.push(mutationObserver);
+    // ---------- CTA validity ----------
+    function isScreenValid(n) {
+      switch (n) {
+        case 1: return state.size.length > 0 && state.size.width > 0;
+        case 2: return state.ground.soil && state.ground.slope && state.ground.direction;
+        case 3: return state.water.source && state.water.distance && state.water.height && state.water.cans > 0;
+        case 4: return !!state.clarity;
+        case 5: {
+          if (!state.tank.type) return false;
+          if (state.tank.type === 'none') return true;
+          return state.tank.litres > 0;
         }
+        case 6: return state.crops.size > 0;
+        case 7: return state.confirm.name.trim().length > 0 && !!state.confirm.language;
+        default: return false;
       }
-
-      relayout();
     }
 
-    boot();
+    function updateCta() {
+      const valid = isScreenValid(currentScreen);
+      ctaBtn.disabled = !valid;
+      ctaBtn.textContent = currentScreen === TOTAL ? 'Generate plan' : 'Continue';
+      // Crops counter
+      if (currentScreen === 6) {
+        const count = state.crops.size;
+        ctaMeta.textContent = count > 0 ? `${count} crop${count === 1 ? '' : 's'} selected` : '';
+      } else {
+        ctaMeta.textContent = '';
+      }
+    }
+
+    // ---------- Event wiring ----------
+    backBtn.addEventListener('click', prev);
+    ctaBtn.addEventListener('click', next);
+
+    // Single-select tile rows
+    document.querySelectorAll('[data-single]').forEach(group => {
+      const key = group.dataset.single;
+      group.addEventListener('click', e => {
+        const tile = e.target.closest('.tile');
+        if (!tile) return;
+        group.querySelectorAll('.tile').forEach(t => t.classList.toggle('selected', t === tile));
+        const val = tile.dataset.value;
+        applySingleSelect(key, val);
+        if (key === 'tankType') {
+          document.getElementById('tankCapacityRow').hidden = (val === 'none');
+          if (val === 'none') state.tank.litres = 0;
+        }
+        updateCta();
+      });
+    });
+
+    function applySingleSelect(key, val) {
+      switch (key) {
+        case 'soil': state.ground.soil = val; break;
+        case 'slope': state.ground.slope = val; break;
+        case 'source': state.water.source = val; break;
+        case 'distance': state.water.distance = val; break;
+        case 'height': state.water.height = val; break;
+        case 'clarity': state.clarity = val; break;
+        case 'tankType': state.tank.type = val; break;
+        case 'language': state.confirm.language = val; break;
+      }
+    }
+
+    // Multi-select crops
+    document.querySelectorAll('[data-multi]').forEach(group => {
+      group.addEventListener('click', e => {
+        const tile = e.target.closest('.tile');
+        if (!tile) return;
+        const val = tile.dataset.value;
+        if (state.crops.has(val)) {
+          state.crops.delete(val);
+          tile.classList.remove('selected');
+        } else {
+          state.crops.add(val);
+          tile.classList.add('selected');
+        }
+        updateCta();
+      });
+    });
+
+    // Compass
+    document.querySelectorAll('.compass-arrow').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.compass-arrow').forEach(b => b.classList.toggle('selected', b === btn));
+        state.ground.direction = btn.dataset.compass;
+        updateCta();
+      });
+    });
+
+    // Numeric inputs (plot size)
+    const lengthInput = document.getElementById('lengthInput');
+    const widthInput = document.getElementById('widthInput');
+    const areaBadge = document.getElementById('areaBadge');
+
+    function updateArea() {
+      const l = parseFloat(lengthInput.value) || 0;
+      const w = parseFloat(widthInput.value) || 0;
+      state.size.length = l;
+      state.size.width = w;
+      areaBadge.textContent = `≈ ${(l * w).toFixed(l * w >= 10 ? 0 : 1)} m²`;
+      updateCta();
+    }
+    lengthInput.addEventListener('input', updateArea);
+    widthInput.addEventListener('input', updateArea);
+
+    // Steppers
+    document.querySelectorAll('[data-stepper]').forEach(stepper => {
+      const key = stepper.dataset.stepper;
+      const min = parseInt(stepper.dataset.min || '0', 10);
+      const max = parseInt(stepper.dataset.max || '999', 10);
+      const stepSize = parseInt(stepper.dataset.stepSize || '1', 10);
+      const countEl = stepper.querySelector('[data-count]');
+      stepper.addEventListener('click', e => {
+        const btn = e.target.closest('button[data-step]');
+        if (!btn) return;
+        const dir = parseInt(btn.dataset.step, 10);
+        let cur = parseInt(countEl.textContent, 10) || 0;
+        cur = Math.min(Math.max(cur + dir * stepSize, min), max);
+        countEl.textContent = String(cur);
+        if (key === 'cans') {
+          state.water.cans = cur;
+          document.getElementById('cansLitres').textContent = `≈ ${cur * 20} litres`;
+        } else if (key === 'tankLitres') {
+          state.tank.litres = cur;
+        }
+        updateCta();
+      });
+    });
+
+    // Confirm screen inputs
+    const nameInput = document.getElementById('nameInput');
+    nameInput.addEventListener('input', () => {
+      state.confirm.name = nameInput.value;
+      updateCta();
+    });
+
+    // Hash deep link
+    window.addEventListener('hashchange', () => {
+      const n = readHash();
+      if (n !== currentScreen) show(n);
+    });
+
+    // Init
+    show(readHash());
+
+    // ---------- Pretext typesetting ----------
+    (async () => {
+      try {
+        const { prepare, layout } = await import('https://esm.sh/@chenglou/pretext');
+        const prepared = new Map();
+
+        function parseLineHeight(style) {
+          const raw = style.lineHeight;
+          if (raw === 'normal') return Math.round(parseFloat(style.fontSize) * 1.4);
+          return parseFloat(raw);
+        }
+
+        function prepareElement(el) {
+          const style = getComputedStyle(el);
+          const text = el.textContent ?? '';
+          prepared.set(el, {
+            handle: prepare(text, style.font),
+            lineHeight: parseLineHeight(style)
+          });
+        }
+
+        function relayout() {
+          for (const [el, value] of prepared.entries()) {
+            const width = el.clientWidth;
+            if (!width) continue;
+            const result = layout(value.handle, width, value.lineHeight);
+            el.style.height = `${result.height}px`;
+          }
+        }
+
+        await document.fonts.ready;
+        const nodes = document.querySelectorAll('[data-pretext]');
+        nodes.forEach(prepareElement);
+
+        const ro = new ResizeObserver(() => relayout());
+        ro.observe(document.body);
+        relayout();
+        // Re-layout when screen changes (clientWidth becomes nonzero)
+        const mo = new MutationObserver(() => relayout());
+        mo.observe(document.querySelector('.screen-body'), { attributes: true, subtree: true, attributeFilter: ['class'] });
+      } catch (err) {
+        // Pretext is best-effort; layout still works without it
+        console.warn('Pretext failed to load', err);
+      }
+    })();
   </script>
 </body>
 </html>
