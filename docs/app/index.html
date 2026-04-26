@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FRADI Drip Planner - Intake Flow</title>
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#168357" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;500;700;800&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f7f4ea;
+      --bg-strong: #efe9d8;
+      --surface: #ffffff;
+      --surface-soft: #f1ede2;
+      --line: rgba(16, 58, 44, 0.12);
+      --line-strong: rgba(16, 58, 44, 0.22);
+      --text: #17392d;
+      --muted: #5a6f64;
+      --green: #168157;
+      --green-strong: #0f6544;
+      --gold: #f3bb48;
+      --selected-bg: rgba(22, 129, 87, 0.08);
+      --shadow-soft: 0 6px 14px rgba(37, 53, 44, 0.06);
+      --shadow-cta: 0 6px 16px rgba(16, 101, 68, 0.18);
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+      --phone-width: min(100%, 430px);
+      --ring: 0 0 0 3px rgba(22, 129, 87, 0.28);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f1713;
+        --bg-strong: #14211b;
+        --surface: #192721;
+        --surface-soft: #142019;
+        --line: rgba(219, 245, 229, 0.10);
+        --line-strong: rgba(219, 245, 229, 0.22);
+        --text: #ecf7ef;
+        --muted: #9eb5aa;
+        --green: #57d39b;
+        --green-strong: #7be4b0;
+        --gold: #f5c45c;
+        --selected-bg: rgba(87, 211, 155, 0.12);
+        --shadow-soft: 0 6px 14px rgba(0, 0, 0, 0.24);
+        --shadow-cta: 0 6px 16px rgba(0, 0, 0, 0.36);
+        --ring: 0 0 0 3px rgba(87, 211, 155, 0.32);
+      }
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Atkinson Hyperlegible Next", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    button {
+      font-family: inherit;
+      transition: transform 140ms ease, box-shadow 140ms ease, background-color 140ms ease, border-color 140ms ease;
+    }
+
+    button:focus-visible,
+    [contenteditable="true"]:focus-visible,
+    .tile:focus-visible,
+    input:focus-visible {
+      outline: none;
+      box-shadow: var(--ring);
+    }
+
+    .phone-shell {
+      width: var(--phone-width);
+      border-radius: 38px;
+      background: #151716;
+      padding: 10px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
+      position: relative;
+    }
+
+    .phone-shell::before {
+      content: "";
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 118px;
+      height: 22px;
+      border-radius: 999px;
+      background: rgba(10, 10, 10, 0.95);
+      z-index: 2;
+    }
+
+    .app {
+      background: var(--bg);
+      border-radius: 30px;
+      overflow: hidden;
+      min-height: 760px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      position: relative;
+    }
+
+    .top-bar {
+      padding: 44px 20px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .back-btn {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text);
+    }
+
+    .back-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .back-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .progress-label {
+      font: 800 12px/1 "Nunito", sans-serif;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .screen-body {
+      padding: 8px 20px 24px;
+      overflow-y: auto;
+      display: grid;
+      align-content: start;
+      gap: 18px;
+    }
+
+    .screen { display: none; gap: 18px; grid-template-columns: 1fr; }
+    .screen.active { display: grid; }
+
+    h2.title {
+      margin: 0;
+      font: 900 28px/1.05 "Nunito", sans-serif;
+      letter-spacing: -0.03em;
+      color: var(--text);
+    }
+
+    p.helper {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .row-group {
+      display: grid;
+      gap: 8px;
+    }
+
+    .row-label {
+      font: 800 12px/1 "Nunito", sans-serif;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .tile-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .tile {
+      appearance: none;
+      cursor: pointer;
+      background: var(--surface);
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 12px 8px;
+      min-height: 92px;
+      display: grid;
+      gap: 6px;
+      align-content: center;
+      justify-items: center;
+      text-align: center;
+      color: var(--text);
+    }
+
+    .tile.selected {
+      border-color: var(--green);
+      background: var(--selected-bg);
+    }
+
+    .tile-icon {
+      width: 36px;
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tile-icon svg {
+      width: 100%;
+      height: 100%;
+      stroke: var(--green-strong);
+      stroke-width: 1.8;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .tile-label {
+      font: 800 13px/1.2 "Nunito", sans-serif;
+    }
+
+    .number-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field label {
+      font: 800 12px/1 "Nunito", sans-serif;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .field input {
+      appearance: none;
+      border: 1.5px solid var(--line);
+      background: var(--surface);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      font: 700 18px/1 "Nunito", sans-serif;
+      color: var(--text);
+      width: 100%;
+    }
+
+    .area-badge {
+      align-self: start;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: var(--surface-soft);
+      border: 1px solid var(--line);
+      font: 800 14px/1 "Nunito", sans-serif;
+      color: var(--green-strong);
+    }
+
+    .stepper {
+      display: inline-grid;
+      grid-template-columns: 44px 60px 44px;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface);
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 6px;
+      width: fit-content;
+    }
+
+    .stepper button {
+      appearance: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: var(--surface-soft);
+      font: 900 20px/1 "Nunito", sans-serif;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .stepper .count {
+      text-align: center;
+      font: 900 22px/1 "Nunito", sans-serif;
+    }
+
+    .stepper-row {
+      display: grid;
+      gap: 8px;
+    }
+
+    .stepper-aux {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .compass {
+      width: 200px;
+      height: 200px;
+      margin: 4px auto 0;
+      position: relative;
+      border-radius: 999px;
+      border: 1.5px dashed var(--line-strong);
+      display: grid;
+      place-items: center;
+    }
+
+    .compass-arrow {
+      position: absolute;
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      border: 1.5px solid var(--line);
+      background: var(--surface);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      color: var(--text);
+      font: 900 14px/1 "Nunito", sans-serif;
+    }
+
+    .compass-arrow.selected {
+      border-color: var(--green);
+      background: var(--selected-bg);
+      color: var(--green-strong);
+    }
+
+    .compass-arrow.n { top: 4px; left: 50%; transform: translateX(-50%); }
+    .compass-arrow.s { bottom: 4px; left: 50%; transform: translateX(-50%); }
+    .compass-arrow.e { right: 4px; top: 50%; transform: translateY(-50%); }
+    .compass-arrow.w { left: 4px; top: 50%; transform: translateY(-50%); }
+
+    .crops-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .photo-placeholder {
+      min-height: 120px;
+      border: 1.5px dashed var(--line-strong);
+      border-radius: var(--radius-md);
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      font: 700 14px/1.3 "Nunito", sans-serif;
+      cursor: pointer;
+      background: var(--surface-soft);
+    }
+
+    .cta-bar {
+      padding: 14px 20px 22px;
+      background: var(--bg);
+      border-top: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .cta-meta {
+      font-size: 12px;
+      color: var(--muted);
+      text-align: right;
+      min-height: 14px;
+    }
+
+    .cta {
+      appearance: none;
+      border: 0;
+      cursor: pointer;
+      width: 100%;
+      min-height: 56px;
+      border-radius: 18px;
+      background: var(--green);
+      color: #f5fff9;
+      font: 900 17px/1 "Nunito", sans-serif;
+      letter-spacing: -0.01em;
+      box-shadow: var(--shadow-cta);
+    }
+
+    .cta:disabled {
+      background: var(--line-strong);
+      color: var(--muted);
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    .cta:not(:disabled):hover,
+    .cta:not(:disabled):focus-visible {
+      transform: translateY(-1px);
+    }
+
+    .toast {
+      position: absolute;
+      left: 50%;
+      bottom: 100px;
+      transform: translateX(-50%) translateY(8px);
+      background: var(--text);
+      color: var(--bg);
+      padding: 10px 16px;
+      border-radius: 999px;
+      font: 800 13px/1 "Nunito", sans-serif;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms ease, transform 200ms ease;
+      z-index: 5;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    [data-pretext] {
+      display: block;
+      height: auto;
+      contain: layout style;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .tile-row, .crops-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-shell">
+    <section class="app" id="app">
+      <header class="top-bar">
+        <button class="back-btn" id="backBtn" aria-label="Go back">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+        </button>
+        <div class="progress-label" id="progressLabel">Step 1 of 8</div>
+        <span style="width:40px"></span>
+      </header>
+
+      <div class="screen-body">
+
+        <!-- Screen 1: Home -->
+        <section class="screen" data-screen="1" data-key="home">
+          <div style="display: grid; gap: 20px; align-content: center; min-height: 300px;">
+            <div>
+              <h2 class="title" data-pretext>Start a new garden plan</h2>
+              <p class="helper" data-pretext>Answer eight quick questions. This makes one picture guide for the gardener and one build sheet for the FRADI workshop.</p>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
+              <div style="background: var(--surface); border: 1.5px solid var(--line); border-radius: 16px; padding: 12px; display: grid; gap: 6px; align-content: start;">
+                <span style="font: 800 13px/1 'Nunito', sans-serif; color: var(--green-strong);">🌱</span>
+                <strong style="font: 800 13px/1.2 'Nunito', sans-serif;">Garden + crops</strong>
+                <span style="color: var(--muted); font-size: 12px; line-height: 1.4;">Plot size, water, and crop choices in one guided flow.</span>
+              </div>
+              <div style="background: var(--surface); border: 1.5px solid var(--line); border-radius: 16px; padding: 12px; display: grid; gap: 6px; align-content: start;">
+                <span style="font: 800 13px/1 'Nunito', sans-serif; color: var(--green-strong);">📄</span>
+                <strong style="font: 800 13px/1.2 'Nunito', sans-serif;">2 PDF outputs</strong>
+                <span style="color: var(--muted); font-size: 12px; line-height: 1.4;">One guide for the gardener. One build sheet for the workshop.</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Screen 2: Plot size -->
+        <section class="screen" data-screen="2" data-key="size">
+          <h2 class="title" data-pretext>How big is the plot?</h2>
+          <p class="helper" data-pretext>Estimate is fine. The worker can pace it out with the gardener.</p>
+          <div class="number-row">
+            <div class="field">
+              <label for="lengthInput">Length (m)</label>
+              <input id="lengthInput" type="number" min="0" step="0.5" inputmode="decimal" placeholder="4" />
+            </div>
+            <div class="field">
+              <label for="widthInput">Width (m)</label>
+              <input id="widthInput" type="number" min="0" step="0.5" inputmode="decimal" placeholder="3" />
+            </div>
+          </div>
+          <div class="area-badge" id="areaBadge">≈ 0 m²</div>
+        </section>
+
+        <!-- Screen 3: Soil, slope, water direction -->
+        <section class="screen" data-screen="3" data-key="ground">
+          <h2 class="title" data-pretext>Soil, slope, and water direction</h2>
+          <p class="helper" data-pretext>Three quick reads of the ground. Pictograms first, words second.</p>
+
+          <div class="row-group">
+            <div class="row-label">Soil</div>
+            <div class="tile-row" data-single="soil">
+              <button class="tile" data-value="sandy">
+                <span class="tile-icon"><svg viewBox="0 0 24 24"><circle cx="6" cy="14" r="1.2"/><circle cx="10" cy="17" r="1.2"/><circle cx="14" cy="13" r="1.2"/><circle cx="18" cy="16" r="1.2"/><circle cx="9" cy="11" r="1.2"/><circle cx="15" cy="9" r="1.2"/></svg></span>
+                <span class="tile-label">Sandy</span>
+              </button>
+              <button class="tile" data-value="loamy">
+                <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M3 16h18"/><path d="M5 12c1.5-2 3-2 4 0s2.5 2 4 0 3-2 4 0 2.5 2 3 0"/></svg></span>
+                <span class="tile-label">Loamy</span>
+              </button>
+              <button class="tile" data-value="rocky">
+                <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M4 17l3-5 3 5"/><path d="M10 17l4-7 4 7"/><path d="M3 17h18"/></svg></span>
+                <span class="tile-label">Rocky</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="row-group">
+            <div class="row-label">Slope</div>
+            <div class="tile-row" data-single="slope">
+              <button class="tile" data-value="flat">
+                <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M3 17h18"/></svg></span>
+                <span class="tile-label">Flat</span>
+              </button>
+              <button class="tile" data-value="gentle">
+                <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M3 17l18-7"/></svg></span>
+                <span class="tile-label">Gentle</span>
+              </button>
+              <button class="tile" data-value="steep">
+                <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M4 19l16-14"/></svg></span>
+                <span class="tile-label">Steep</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="row-group">
+            <div class="row-label">Which direction does water flow toward the plot?</div>
+            <div class="compass" role="radiogroup" aria-label="Water flow direction">
+              <button class="compass-arrow n" data-compass="N" aria-label="North">N</button>
+              <button class="compass-arrow s" data-compass="S" aria-label="South">S</button>
+              <button class="compass-arrow e" data-compass="E" aria-label="East">E</button>
+              <button class="compass-arrow w" data-compass="W" aria-label="West">W</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Screen 4: Water source -->
+        <section class="screen" data-screen="4" data-key="water">
+          <h2 class="title" data-pretext>Where is the water?</h2>
+          <p class="helper" data-pretext>Source, distance, and height shape what tubing and pressure the workshop builds.</p>
+
+          <div class="row-group">
+            <div class="row-label">Source</div>
+            <div class="tile-row" data-single="source">
+              <button class="tile" data-value="jerrycan">
+                <span class="tile-icon"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="14" rx="1.5"/><path d="M9 6V4h6v2"/><path d="M18 10h2v3h-2"/></svg></span>
+                <span class="tile-label">Jerrycan</span>
+              </button>
+              <button class="tile" data-value="tap">
+                <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M5 9h7v3H5z"/><path d="M12 10h6"/><path d="M18 8v4"/><path d="M8 12v4l-1 4h4l-1-4v-4"/></svg></span>
+                <span class="tile-label">Tap</span>
+              </button>
+              <button class="tile" data-value="rain-barrel">
+                <span class="tile-icon"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="6" ry="2"/><path d="M6 6v12c0 1.1 2.7 2 6 2s6-.9 6-2V6"/><path d="M6 12c0 1.1 2.7 2 6 2s6-.9 6-2"/></svg></span>
+                <span class="tile-label">Rain barrel</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="row-group">
+            <div class="row-label">Distance</div>
+            <div class="tile-row" data-single="distance">
+              <button class="tile" data-value="next">
+                <span class="tile-icon"><svg viewBox="0 0 24 24"><circle cx="8" cy="12" r="2"/><circle cx="16" cy="12" r="2"/><path d="M10 12h4"/></svg></span>
+                <span class="tile-label">Next to plot</span>
+              </button>
+              <button class="tile" data-value="few">
+                <span class="tile-icon"><svg viewBox="0 0 24 24"><circle cx="6" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="18" cy="12" r="1.6"/></svg></span>
+                <span class="tile-label">Few steps</span>
+              </button>
+              <button class="tile" data-value="far">
+                <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M3 12h18"/><path d="M17 8l4 4-4 4"/></svg></span>
+                <span class="tile-label">Carry far</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="row-group">
+            <div class="row-label">Height vs plot</div>
+            <div class="tile-row" data-single="height">
+              <button class="tile" data-value="below">
+                <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M12 4v14"/><path d="M7 13l5 5 5-5"/></svg></span>
+                <span class="tile-label">Below</span>
+              </button>
+              <button class="tile" data-value="level">
+                <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M4 12h16"/></svg></span>
+                <span class="tile-label">Level</span>
+              </button>
+              <button class="tile" data-value="above">
+                <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M12 20V6"/><path d="M7 11l5-5 5 5"/></svg></span>
+                <span class="tile-label">Above</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="row-group stepper-row">
+            <div class="row-label">How many jerry cans per day?</div>
+            <div class="stepper" data-stepper="cans" data-min="0" data-max="40">
+              <button data-step="-1" aria-label="Decrease">−</button>
+              <div class="count" data-count>0</div>
+              <button data-step="1" aria-label="Increase">+</button>
+            </div>
+            <div class="stepper-aux" id="cansLitres">≈ 0 litres</div>
+          </div>
+        </section>
+
+        <!-- Screen 5: Water clarity -->
+        <section class="screen" data-screen="5" data-key="clarity">
+          <h2 class="title" data-pretext>Is the water clear?</h2>
+          <p class="helper" data-pretext>Sediment can block drippers — the plan accounts for this.</p>
+          <div class="tile-row" data-single="clarity">
+            <button class="tile" data-value="clear">
+              <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M12 4c-3 5-5 8-5 11a5 5 0 0 0 10 0c0-3-2-6-5-11z"/></svg></span>
+              <span class="tile-label">Clear</span>
+            </button>
+            <button class="tile" data-value="slightly-cloudy">
+              <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M12 4c-3 5-5 8-5 11a5 5 0 0 0 10 0c0-3-2-6-5-11z"/><path d="M9 14c1 .8 2 .8 3 0s2-.8 3 0"/></svg></span>
+              <span class="tile-label">Slightly cloudy</span>
+            </button>
+            <button class="tile" data-value="murky">
+              <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M12 4c-3 5-5 8-5 11a5 5 0 0 0 10 0c0-3-2-6-5-11z"/><path d="M8 13c.8.6 1.6.6 2.4 0s1.6-.6 2.4 0 1.6.6 2.4 0"/><path d="M8 16c.8.6 1.6.6 2.4 0s1.6-.6 2.4 0 1.6.6 2.4 0"/></svg></span>
+              <span class="tile-label">Murky</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- Screen 6: Water tank -->
+        <section class="screen" data-screen="6" data-key="tank">
+          <h2 class="title" data-pretext>Do you have a water tank?</h2>
+          <p class="helper" data-pretext>A tank lets the system run on gravity instead of constant carrying.</p>
+          <div class="tile-row" data-single="tankType">
+            <button class="tile" data-value="none">
+              <span class="tile-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M6 18l12-12"/></svg></span>
+              <span class="tile-label">No tank</span>
+            </button>
+            <button class="tile" data-value="small">
+              <span class="tile-icon"><svg viewBox="0 0 24 24"><rect x="8" y="6" width="8" height="12" rx="1.5"/><path d="M8 14h8"/></svg></span>
+              <span class="tile-label">Small (&lt;200 L)</span>
+            </button>
+            <button class="tile" data-value="large">
+              <span class="tile-icon"><svg viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="16" rx="2"/><path d="M5 12h14"/><path d="M5 16h14"/></svg></span>
+              <span class="tile-label">Large (200 L+)</span>
+            </button>
+          </div>
+          <div class="row-group stepper-row" id="tankCapacityRow" hidden>
+            <div class="row-label">Tank capacity (litres)</div>
+            <div class="stepper" data-stepper="tankLitres" data-min="0" data-max="5000" data-step-size="50">
+              <button data-step="-1" aria-label="Decrease">−</button>
+              <div class="count" data-count>0</div>
+              <button data-step="1" aria-label="Increase">+</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Screen 7: Crops -->
+        <section class="screen" data-screen="7" data-key="crops">
+          <h2 class="title" data-pretext>What will you grow?</h2>
+          <p class="helper" data-pretext>Pick everything the gardener wants. Tap to toggle.</p>
+          <div class="crops-grid" data-multi="crops">
+            <button class="tile" data-value="sukuma_wiki">
+              <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M12 4c-4 0-7 3-7 7 0 3 2 5 7 9 5-4 7-6 7-9 0-4-3-7-7-7z"/><path d="M12 11v9"/></svg></span>
+              <span class="tile-label">Sukuma wiki</span>
+            </button>
+            <button class="tile" data-value="tomato">
+              <span class="tile-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="14" r="6"/><path d="M9 8c1 1 5 1 6 0"/><path d="M12 8V6"/></svg></span>
+              <span class="tile-label">Tomato</span>
+            </button>
+            <button class="tile" data-value="kale">
+              <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M12 4c-3 2-5 5-5 9s2 6 5 6 5-2 5-6-2-7-5-9z"/><path d="M12 19V8"/></svg></span>
+              <span class="tile-label">Kale</span>
+            </button>
+            <button class="tile" data-value="onion">
+              <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M12 8c-3 0-5 2-5 6s2 6 5 6 5-2 5-6-2-6-5-6z"/><path d="M10 8l2-4 2 4"/></svg></span>
+              <span class="tile-label">Onion</span>
+            </button>
+            <button class="tile" data-value="amaranth">
+              <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M12 4v16"/><path d="M12 8c2-1 4-1 5 1"/><path d="M12 12c-2-1-4-1-5 1"/><path d="M12 16c2-1 4-1 5 1"/></svg></span>
+              <span class="tile-label">Amaranth</span>
+            </button>
+            <button class="tile" data-value="spinach">
+              <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M5 12c2-5 5-7 7-7s5 2 7 7c-2 5-5 7-7 7s-5-2-7-7z"/><path d="M5 12h14"/></svg></span>
+              <span class="tile-label">Spinach</span>
+            </button>
+            <button class="tile" data-value="carrot">
+              <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M12 8l-4 12 8-2z"/><path d="M12 8l2-4"/><path d="M12 8l-2-4"/></svg></span>
+              <span class="tile-label">Carrot</span>
+            </button>
+            <button class="tile" data-value="pepper">
+              <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M9 8c0-2 2-4 4-4 1 2 2 3 4 3-1 3-2 5-4 5-3 0-4-2-4-4z"/><path d="M11 12c-3 1-5 4-5 7"/></svg></span>
+              <span class="tile-label">Pepper</span>
+            </button>
+            <button class="tile" data-value="beans">
+              <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M8 6c4 0 8 3 8 8 0 3-2 4-4 4-4 0-8-3-8-8 0-3 2-4 4-4z"/></svg></span>
+              <span class="tile-label">Beans</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- Screen 8: Confirm -->
+        <section class="screen" data-screen="8" data-key="confirm">
+          <h2 class="title" data-pretext>Confirm and finish</h2>
+          <p class="helper" data-pretext>The gardener's name and language go on the printed guide. The photo helps the workshop.</p>
+
+          <div class="field">
+            <label for="nameInput">Gardener name</label>
+            <input id="nameInput" type="text" placeholder="Hawa Abdulrahman" />
+          </div>
+
+          <div class="row-group">
+            <div class="row-label">Gardener language</div>
+            <div class="tile-row" data-single="language">
+              <button class="tile" data-value="sw">
+                <span class="tile-label">Swahili</span>
+              </button>
+              <button class="tile" data-value="ar">
+                <span class="tile-label">Arabic</span>
+              </button>
+              <button class="tile" data-value="so">
+                <span class="tile-label">Somali</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="row-group">
+            <div class="row-label">Plot photo</div>
+            <button class="photo-placeholder" type="button">Tap to add photo</button>
+          </div>
+        </section>
+
+      </div>
+
+      <footer class="cta-bar">
+        <div class="cta-meta" id="ctaMeta"></div>
+        <button class="cta" id="ctaBtn" type="button">Continue</button>
+      </footer>
+
+      <div class="toast" id="toast" role="status" aria-live="polite">Plan saved and PDFs generated</div>
+    </section>
+  </div>
+
+  <script type="module">
+    import { designGarden } from './engine.js';
+    import { generateGardenerPDF } from './pdf-gardener.js';
+    import { generateWorkshopPDF } from './pdf-workshop.js';
+    import { saveRecord } from './storage.js';
+
+    const TOTAL = 8;
+    const screens = Array.from(document.querySelectorAll('.screen'));
+    const backBtn = document.getElementById('backBtn');
+    const progressLabel = document.getElementById('progressLabel');
+    const ctaBtn = document.getElementById('ctaBtn');
+    const ctaMeta = document.getElementById('ctaMeta');
+    const toast = document.getElementById('toast');
+
+    const state = {
+      size: { length: null, width: null },
+      ground: { soil: null, slope: null, direction: null },
+      water: { source: null, distance: null, height: null, cans: 0 },
+      clarity: null,
+      tank: { type: null, litres: 0 },
+      crops: new Set(),
+      confirm: { name: '', language: null }
+    };
+
+    let currentScreen = 1;
+    let catalogs = null;
+
+    // Load catalogs on startup
+    async function loadCatalogs() {
+      try {
+        const [crops, parts, extrusion, moulds] = await Promise.all([
+          fetch('/data/crops-catalog.json').then(r => r.json()),
+          fetch('/data/parts-catalog.json').then(r => r.json()),
+          fetch('/data/extrusion-profiles.json').then(r => r.json()),
+          fetch('/data/mould-catalog.json').then(r => r.json())
+        ]);
+        return {
+          crops: crops.crops,
+          parts: parts.parts,
+          extrusion_profiles: extrusion.profiles,
+          moulds: moulds.moulds
+        };
+      } catch (err) {
+        console.error('Failed to load catalogs:', err);
+        throw err;
+      }
+    }
+
+    function readHash() {
+      const m = (location.hash || '').match(/^#step-(\d+)$/);
+      const n = m ? parseInt(m[1], 10) : 1;
+      return Math.min(Math.max(n, 1), TOTAL);
+    }
+
+    function writeHash(n) {
+      const target = `#step-${n}`;
+      if (location.hash !== target) {
+        history.replaceState(null, '', target);
+      }
+    }
+
+    function show(n) {
+      currentScreen = n;
+      screens.forEach(s => s.classList.toggle('active', Number(s.dataset.screen) === n));
+      progressLabel.textContent = `Step ${n} of ${TOTAL}`;
+      backBtn.disabled = n === 1;
+      writeHash(n);
+      updateCta();
+      const body = document.querySelector('.screen-body');
+      if (body) body.scrollTop = 0;
+    }
+
+    function downloadPDF(bytes, filename) {
+      const blob = new Blob([bytes], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    async function generateAndSave() {
+      ctaBtn.disabled = true;
+      try {
+        // Normalize state for engine
+        const answers = {
+          size: state.size,
+          ground: state.ground,
+          water: state.water,
+          clarity: state.clarity,
+          tank: state.tank,
+          crops: state.crops,
+          confirm: state.confirm
+        };
+
+        // Load catalogs if not cached
+        if (!catalogs) {
+          catalogs = await loadCatalogs();
+        }
+
+        // Design the garden
+        const design = await designGarden(answers, catalogs);
+
+        // Get crop objects for the PDF generators
+        const cropObjects = Array.from(state.crops).map(cropId => {
+          return catalogs.crops.find(c => c.id === cropId);
+        });
+
+        // Generate PDFs
+        const [gardenerPdf, workshopPdf] = await Promise.all([
+          generateGardenerPDF(design, { ...answers, crops: cropObjects }),
+          generateWorkshopPDF(design, answers)
+        ]);
+
+        // Save record
+        await saveRecord({
+          timestamp: Date.now(),
+          answers,
+          design
+        });
+
+        // Download PDFs
+        downloadPDF(gardenerPdf, `fradi-garden-${design.gardener_name.replace(/\s+/g, '-')}.pdf`);
+        downloadPDF(workshopPdf, `fradi-workshop-${design.gardener_name.replace(/\s+/g, '-')}.pdf`);
+
+        // Show success
+        showToast();
+        resetState();
+        show(1);
+      } catch (err) {
+        console.error('Generation failed:', err);
+        alert('Error: ' + err.message);
+      } finally {
+        ctaBtn.disabled = false;
+      }
+    }
+
+    async function next() {
+      if (currentScreen >= TOTAL) {
+        await generateAndSave();
+        return;
+      }
+      show(currentScreen + 1);
+    }
+
+    function prev() {
+      if (currentScreen > 1) show(currentScreen - 1);
+    }
+
+    function showToast() {
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+
+    function resetState() {
+      state.size = { length: null, width: null };
+      state.ground = { soil: null, slope: null, direction: null };
+      state.water = { source: null, distance: null, height: null, cans: 0 };
+      state.clarity = null;
+      state.tank = { type: null, litres: 0 };
+      state.crops = new Set();
+      state.confirm = { name: '', language: null };
+      document.querySelectorAll('.tile.selected, .compass-arrow.selected').forEach(el => el.classList.remove('selected'));
+      document.querySelectorAll('input').forEach(i => { i.value = ''; });
+      document.querySelectorAll('[data-count]').forEach(c => { c.textContent = '0'; });
+      document.getElementById('areaBadge').textContent = '≈ 0 m²';
+      document.getElementById('cansLitres').textContent = '≈ 0 litres';
+      document.getElementById('tankCapacityRow').hidden = true;
+    }
+
+    function isScreenValid(n) {
+      switch (n) {
+        case 1: return true;
+        case 2: return state.size.length > 0 && state.size.width > 0;
+        case 3: return state.ground.soil && state.ground.slope && state.ground.direction;
+        case 4: return state.water.source && state.water.distance && state.water.height && state.water.cans > 0;
+        case 5: return !!state.clarity;
+        case 6: {
+          if (!state.tank.type) return false;
+          if (state.tank.type === 'none') return true;
+          return state.tank.litres > 0;
+        }
+        case 7: return state.crops.size > 0;
+        case 8: return state.confirm.name.trim().length > 0 && !!state.confirm.language;
+        default: return false;
+      }
+    }
+
+    function updateCta() {
+      const valid = isScreenValid(currentScreen);
+      ctaBtn.disabled = !valid;
+      ctaBtn.textContent = currentScreen === TOTAL ? 'Generate plan' : 'Continue';
+      if (currentScreen === 7) {
+        const count = state.crops.size;
+        ctaMeta.textContent = count > 0 ? `${count} crop${count === 1 ? '' : 's'} selected` : '';
+      } else {
+        ctaMeta.textContent = '';
+      }
+    }
+
+    backBtn.addEventListener('click', prev);
+    ctaBtn.addEventListener('click', next);
+
+    document.querySelectorAll('[data-single]').forEach(group => {
+      const key = group.dataset.single;
+      group.addEventListener('click', e => {
+        const tile = e.target.closest('.tile');
+        if (!tile) return;
+        group.querySelectorAll('.tile').forEach(t => t.classList.toggle('selected', t === tile));
+        const val = tile.dataset.value;
+        applySingleSelect(key, val);
+        if (key === 'tankType') {
+          document.getElementById('tankCapacityRow').hidden = (val === 'none');
+          if (val === 'none') state.tank.litres = 0;
+        }
+        updateCta();
+      });
+    });
+
+    function applySingleSelect(key, val) {
+      switch (key) {
+        case 'soil': state.ground.soil = val; break;
+        case 'slope': state.ground.slope = val; break;
+        case 'source': state.water.source = val; break;
+        case 'distance': state.water.distance = val; break;
+        case 'height': state.water.height = val; break;
+        case 'clarity': state.clarity = val; break;
+        case 'tankType': state.tank.type = val; break;
+        case 'language': state.confirm.language = val; break;
+      }
+    }
+
+    document.querySelectorAll('[data-multi]').forEach(group => {
+      group.addEventListener('click', e => {
+        const tile = e.target.closest('.tile');
+        if (!tile) return;
+        const val = tile.dataset.value;
+        if (state.crops.has(val)) {
+          state.crops.delete(val);
+          tile.classList.remove('selected');
+        } else {
+          state.crops.add(val);
+          tile.classList.add('selected');
+        }
+        updateCta();
+      });
+    });
+
+    document.querySelectorAll('.compass-arrow').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.compass-arrow').forEach(b => b.classList.toggle('selected', b === btn));
+        state.ground.direction = btn.dataset.compass;
+        updateCta();
+      });
+    });
+
+    const lengthInput = document.getElementById('lengthInput');
+    const widthInput = document.getElementById('widthInput');
+    const areaBadge = document.getElementById('areaBadge');
+
+    function updateArea() {
+      const l = parseFloat(lengthInput.value) || 0;
+      const w = parseFloat(widthInput.value) || 0;
+      state.size.length = l;
+      state.size.width = w;
+      areaBadge.textContent = `≈ ${(l * w).toFixed(l * w >= 10 ? 0 : 1)} m²`;
+      updateCta();
+    }
+    lengthInput.addEventListener('input', updateArea);
+    widthInput.addEventListener('input', updateArea);
+
+    document.querySelectorAll('[data-stepper]').forEach(stepper => {
+      const key = stepper.dataset.stepper;
+      const min = parseInt(stepper.dataset.min || '0', 10);
+      const max = parseInt(stepper.dataset.max || '999', 10);
+      const stepSize = parseInt(stepper.dataset.stepSize || '1', 10);
+      const countEl = stepper.querySelector('[data-count]');
+      stepper.addEventListener('click', e => {
+        const btn = e.target.closest('button[data-step]');
+        if (!btn) return;
+        const dir = parseInt(btn.dataset.step, 10);
+        let cur = parseInt(countEl.textContent, 10) || 0;
+        cur = Math.min(Math.max(cur + dir * stepSize, min), max);
+        countEl.textContent = String(cur);
+        if (key === 'cans') {
+          state.water.cans = cur;
+          document.getElementById('cansLitres').textContent = `≈ ${cur * 20} litres`;
+        } else if (key === 'tankLitres') {
+          state.tank.litres = cur;
+        }
+        updateCta();
+      });
+    });
+
+    const nameInput = document.getElementById('nameInput');
+    nameInput.addEventListener('input', () => {
+      state.confirm.name = nameInput.value;
+      updateCta();
+    });
+
+    window.addEventListener('hashchange', () => {
+      const n = readHash();
+      if (n !== currentScreen) show(n);
+    });
+
+    // Register service worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').catch(err => {
+        console.warn('Service Worker registration failed:', err);
+      });
+    }
+
+    // Pre-load catalogs on init
+    loadCatalogs().then(c => {
+      catalogs = c;
+    }).catch(err => {
+      console.error('Failed to pre-load catalogs:', err);
+    });
+
+    show(readHash());
+
+    (async () => {
+      try {
+        const { prepare, layout } = await import('https://esm.sh/@chenglou/pretext');
+        const prepared = new Map();
+
+        function parseLineHeight(style) {
+          const raw = style.lineHeight;
+          if (raw === 'normal') return Math.round(parseFloat(style.fontSize) * 1.4);
+          return parseFloat(raw);
+        }
+
+        function prepareElement(el) {
+          const style = getComputedStyle(el);
+          const text = el.textContent ?? '';
+          prepared.set(el, {
+            handle: prepare(text, style.font),
+            lineHeight: parseLineHeight(style)
+          });
+        }
+
+        function relayout() {
+          for (const [el, value] of prepared.entries()) {
+            const width = el.clientWidth;
+            if (!width) continue;
+            const result = layout(value.handle, width, value.lineHeight);
+            el.style.height = `${result.height}px`;
+          }
+        }
+
+        await document.fonts.ready;
+        const nodes = document.querySelectorAll('[data-pretext]');
+        nodes.forEach(prepareElement);
+
+        const ro = new ResizeObserver(() => relayout());
+        ro.observe(document.body);
+        relayout();
+        const mo = new MutationObserver(() => relayout());
+        mo.observe(document.querySelector('.screen-body'), { attributes: true, subtree: true, attributeFilter: ['class'] });
+      } catch (err) {
+        console.warn('Pretext failed to load', err);
+      }
+    })();
+  </script>
+</body>
+</html>

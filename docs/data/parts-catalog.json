@@ -1,0 +1,53 @@
+{
+  "parts": [
+    {
+      "id": "hdpe-lateral-16-perforated",
+      "type": "tubing",
+      "name": "HDPE Lateral Tubing 16mm OD (Perforated)",
+      "polymer": "HDPE",
+      "od_mm": 16,
+      "id_mm": 13,
+      "wall_mm": 1.5,
+      "grams_per_meter": 0.31,
+      "extrusion_profile_id": "hdpe-tubing-v4",
+      "hole_diameter_mm": 1.0,
+      "hole_spacing_cm": 25,
+      "uv_stable": true,
+      "notes": "Extruded HDPE lateral with hand-drilled holes at 25cm spacing (adjustable per crop). Holes made with heated needle or drill. Simple, proven design. No custom moulds needed."
+    },
+    {
+      "id": "cotton-wick-tape",
+      "type": "dripper",
+      "name": "Cotton Wick Tape",
+      "material": "cotton",
+      "width_mm": 20,
+      "thickness_mm": 3,
+      "grams_per_meter": 12,
+      "capillary_flow_rate_lph": 0.3,
+      "notes": "Strips of cotton fabric sewn or glued to lateral tubing. Water wicks through at controlled capillary rate (~0.3 L/hr per wick). No manufacturing needed — sourced or hand-sewn."
+    },
+    {
+      "id": "pp-manifold-chamber",
+      "type": "manifold",
+      "name": "PP Manifold Chamber",
+      "polymer": "PP",
+      "grams": 12.0,
+      "mould_id": "manifold-mould-std",
+      "moulder_cycle_seconds": 60,
+      "inlet_diameter_mm": 12,
+      "outlet_count": 4,
+      "notes": "Accepts water input, distributes to 4 laterals via quick-connects or barbed fittings."
+    },
+    {
+      "id": "pp-connector-m16",
+      "type": "connector",
+      "name": "PP Barbed Connector M16",
+      "polymer": "PP",
+      "grams": 2.5,
+      "mould_id": "connector-mould-m16",
+      "moulder_cycle_seconds": 20,
+      "internal_diameter_mm": 16,
+      "notes": "Barbed fitting. Pushes onto 16mm OD lateral tubing. Reusable. Connects to manifold outlet."
+    }
+  ]
+}

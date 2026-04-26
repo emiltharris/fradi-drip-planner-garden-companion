@@ -1,0 +1,17 @@
+{
+  "profiles": [
+    {
+      "id": "hdpe-tubing-v4",
+      "polymer": "HDPE",
+      "machine": "Precious Plastic Extrusion Pro V4",
+      "screw_rpm": 50,
+      "throughput_kg_per_hr": 8,
+      "zone_temps_celsius": {
+        "feed": 170,
+        "barrel": 190,
+        "nozzle": 210
+      },
+      "notes": "Standard temperature for UV-stable HDPE tubing. 16mm OD / 13mm ID lateral. Perforated post-extrusion with hand drill or heated needle at 25cm spacing."
+    }
+  ]
+}
