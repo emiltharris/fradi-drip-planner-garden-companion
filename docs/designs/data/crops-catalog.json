@@ -1,0 +1,175 @@
+{
+  "crops": [
+    {
+      "id": "sukuma",
+      "name": {
+        "en": "Sukuma Wiki",
+        "sw": "Sukuma Wiki",
+        "ar": "سوكوما ويكي",
+        "so": "Sukuma Wiki"
+      },
+      "water_l_per_plant_per_day": 2.0,
+      "spacing_cm": 30,
+      "sun_min_hours": 3,
+      "growing_season_months": 12,
+      "care_text": {
+        "en": "Water daily, especially in hot weather. Harvest outer leaves continuously. Mulch to retain moisture.",
+        "sw": "Mwagilia kila siku, hasa katika joto. Pokea majani ya nje kila wakati. Tia udongo kuzuia ufa.",
+        "ar": "اسقِ يومياً خاصة في الطقس الحار. احصد الأوراق الخارجية باستمرار. استخدم الحشائش للاحتفاظ بالرطوبة.",
+        "so": "Af qab maalin kasta, gaar ahaan hawlka kulul. Koritaag alwaaxda dibadda oo joogta ah. Dabooli iska ilali. "
+      }
+    },
+    {
+      "id": "tomato",
+      "name": {
+        "en": "Tomato",
+        "sw": "Nyanya",
+        "ar": "الطماطم",
+        "so": "Tomaato"
+      },
+      "water_l_per_plant_per_day": 4.0,
+      "spacing_cm": 45,
+      "sun_min_hours": 6,
+      "growing_season_months": 7,
+      "care_text": {
+        "en": "Water deeply and regularly. Support plants with stakes. Pinch off suckers. Watch for pests.",
+        "sw": "Mwagilia kwa kina na kwa mara kwa mara. Sambaza miti kwa bendera. Kamata matawi ya ziada. Angalia wadudu.",
+        "ar": "اسقِ بعمق وانتظام. ادعم النباتات بأعمدة. أزل الفروع الإضافية. راقب الآفات.",
+        "so": "Af qab oo joogta ah. Taagga dhirta waxbaari leh. Jari raaxyo labada. Eeg cayayaan."
+      }
+    },
+    {
+      "id": "kale",
+      "name": {
+        "en": "Kale",
+        "sw": "Sukuma Kidogo",
+        "ar": "الكرنب الأجعد",
+        "so": "Kale"
+      },
+      "water_l_per_plant_per_day": 2.5,
+      "spacing_cm": 35,
+      "sun_min_hours": 4,
+      "growing_season_months": 5,
+      "care_text": {
+        "en": "Water regularly. Harvest outer leaves. Tolerates cool weather. Remove dead leaves.",
+        "sw": "Mwagilia kwa mara kwa mara. Pokea majani ya nje. Kuvumilia joto kidogo. Ondoa majani yaliyokufa.",
+        "ar": "اسقِ بانتظام. احصد الأوراق الخارجية. يتحمل الطقس البارد. أزل الأوراق الميتة.",
+        "so": "Af qab si joogtada ah. Koritaag alwaaxda dibadda. Adkayso hawlka kulul. Tir alwaaxda dhimata."
+      }
+    },
+    {
+      "id": "onion",
+      "name": {
+        "en": "Onion",
+        "sw": "Kabichi",
+        "ar": "البصل",
+        "so": "Oniyon"
+      },
+      "water_l_per_plant_per_day": 2.5,
+      "spacing_cm": 12,
+      "sun_min_hours": 6,
+      "growing_season_months": 5,
+      "care_text": {
+        "en": "Water consistently. Reduce water as bulbs mature. Keep soil loose. Harvest when tops yellow.",
+        "sw": "Mwagilia kwa mara kwa mara. Punguza maji wakati mikofu inapokuwa kama. Endelea udongo si imara. Pokea wakati ncha zina njano.",
+        "ar": "اسقِ بثبات. قلل الماء مع نضج البصل. أبقِ التربة رخوة. احصد عندما تصفر الأوراق العلوية.",
+        "so": "Af qab si joogtada ah. Yareynta biyo halkaasoo midhayaal kusugan. Endelea udoongo la'aan si qoto dheer. Koritaag markay sare u madhibi."
+      }
+    },
+    {
+      "id": "spinach",
+      "name": {
+        "en": "Spinach",
+        "sw": "Mchicha",
+        "ar": "السبانخ",
+        "so": "Spinach"
+      },
+      "water_l_per_plant_per_day": 1.5,
+      "spacing_cm": 12,
+      "sun_min_hours": 3,
+      "growing_season_months": 3,
+      "care_text": {
+        "en": "Water lightly but consistently. Grows quickly. Harvest outer leaves. Can bolt in heat.",
+        "sw": "Mwagilia kidogo lakini kwa mara kwa mara. Inapanda haraka. Pokea majani ya nje. Inaweza ku-bolt katika joto.",
+        "ar": "اسقِ خفيفاً ولكن بانتظام. ينمو بسرعة. احصد الأوراق الخارجية. قد ينطلق في الحرارة.",
+        "so": "Af qab si yar oo joogtada ah. Korma degdeg. Koritaag alwaaxda dibadda. Waxaa laga yaabaa inay fiiriyaan hawlka kulul."
+      }
+    },
+    {
+      "id": "pepper",
+      "name": {
+        "en": "Pepper",
+        "sw": "Pilipili",
+        "ar": "الفلفل",
+        "so": "Filifili"
+      },
+      "water_l_per_plant_per_day": 3.5,
+      "spacing_cm": 50,
+      "sun_min_hours": 6,
+      "growing_season_months": 7,
+      "care_text": {
+        "en": "Water regularly. Prefers warm weather. Support with stakes. Pick fruits to encourage more.",
+        "sw": "Mwagilia kwa mara kwa mara. Inapendelea joto. Tia bendera. Pinga matunda kuzuia kuongezwa.",
+        "ar": "اسقِ بانتظام. يفضل الطقس الدافئ. ادعم بأعمدة. اختر الفواكه لتشجيع المزيد.",
+        "so": "Af qab si joogtada ah. Jecel hawlka kulul. Taago leh waxbaari. Kadi midhaha si loo dhexdhexadiyo inta badan."
+      }
+    },
+    {
+      "id": "beans",
+      "name": {
+        "en": "Beans",
+        "sw": "Maharagwe",
+        "ar": "الفاصوليا",
+        "so": "Beans"
+      },
+      "water_l_per_plant_per_day": 2.5,
+      "spacing_cm": 35,
+      "sun_min_hours": 5,
+      "growing_season_months": 4,
+      "care_text": {
+        "en": "Water deeply but not daily. Support climbing varieties. Harvest regularly. Nitrogen-fixing.",
+        "sw": "Mwagilia kwa kina lakini si kila siku. Sambaza aina zinazopanda. Pokea kwa mara kwa mara. Inasambaza nitrojeni.",
+        "ar": "اسقِ بعمق لكن ليس يومياً. ادعم الأنواع المتسلقة. احصد بانتظام. تثبت النيتروجين.",
+        "so": "Af qab oo joogta laakiin maalin kasta ma aha. Taago loo sarro jecel ama korma kuul. Koritaag si joogtada ah. Nitrogen-fixing."
+      }
+    },
+    {
+      "id": "carrot",
+      "name": {
+        "en": "Carrot",
+        "sw": "Karroti",
+        "ar": "الجزرة",
+        "so": "Karrots"
+      },
+      "water_l_per_plant_per_day": 1.8,
+      "spacing_cm": 8,
+      "sun_min_hours": 4,
+      "growing_season_months": 4,
+      "care_text": {
+        "en": "Water moderately. Keep soil loose for root growth. Thin seedlings early. Good for storage.",
+        "sw": "Mwagilia katikati. Endelea udongo si imara kwa ukuaji wa mizizi. Nyonyeza mbegu mapema. Nzuri kwa kuhifadhi.",
+        "ar": "اسقِ باعتدال. حافظ على التربة رخوة لنمو الجذور. رقق الشتلات مبكراً. جيدة للتخزين.",
+        "so": "Af qab si dhexe ah. Endelea udoongo la'aan si qoto dheer inta ay jiirayaan xiddigaha. Yareynta abidka hore. Wanaag loogu jiro kaydin."
+      }
+    },
+    {
+      "id": "amaranth",
+      "name": {
+        "en": "Amaranth",
+        "sw": "Mchicha wa Kigeni",
+        "ar": "الرندة",
+        "so": "Amaranth"
+      },
+      "water_l_per_plant_per_day": 2.0,
+      "spacing_cm": 25,
+      "sun_min_hours": 4,
+      "growing_season_months": 3,
+      "care_text": {
+        "en": "Drought-tolerant. Water when soil is dry. Harvest leaves regularly. Edible seeds too.",
+        "sw": "Inakabiliana na ukame. Mwagilia wakati udongo ni kavu. Pokea majani kwa mara kwa mara. Mbegu ni kula.",
+        "ar": "متحمل للجفاف. اسقِ عندما تكون التربة جافة. احصد الأوراق بانتظام. البذور صالحة للأكل أيضاً.",
+        "so": "Adkayso qanacda. Af qab markay udoongo xaabo. Koritaag alwaaxda si joogtada ah. Abidka cuntada."
+      }
+    }
+  ]
+}

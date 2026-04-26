@@ -1,0 +1,43 @@
+{
+  "profiles": [
+    {
+      "id": "hdpe-tubing-v4",
+      "polymer": "HDPE",
+      "machine": "Precious Plastic Extrusion Pro V4",
+      "screw_rpm": 50,
+      "throughput_kg_per_hr": 8,
+      "zone_temps_celsius": {
+        "feed": 170,
+        "barrel": 190,
+        "nozzle": 210
+      },
+      "notes": "Standard temperature for UV-stable HDPE tubing. 16mm OD / 13mm ID lateral."
+    },
+    {
+      "id": "hdpe-micro-v4",
+      "polymer": "HDPE",
+      "machine": "Precious Plastic Extrusion Pro V4",
+      "screw_rpm": 45,
+      "throughput_kg_per_hr": 4,
+      "zone_temps_celsius": {
+        "feed": 165,
+        "barrel": 185,
+        "nozzle": 205
+      },
+      "notes": "Lower throughput for small-diameter 4mm OD micro-tubing. Heat-sensitive polymer."
+    },
+    {
+      "id": "pp-connector-v4",
+      "polymer": "PP",
+      "machine": "Precious Plastic Extrusion Pro V4",
+      "screw_rpm": 55,
+      "throughput_kg_per_hr": 10,
+      "zone_temps_celsius": {
+        "feed": 185,
+        "barrel": 210,
+        "nozzle": 230
+      },
+      "notes": "PP for rigid connector pieces. Higher nozzle temp for better flow."
+    }
+  ]
+}

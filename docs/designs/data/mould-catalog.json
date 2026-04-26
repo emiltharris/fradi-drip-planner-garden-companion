@@ -1,0 +1,64 @@
+{
+  "moulds": [
+    {
+      "id": "peg-mould-std",
+      "name": "Plasticpreneur Standard Peg Mould",
+      "type": "injection",
+      "source": "https://www.plasticpreneur.com/",
+      "part_id": "pp-dripper-peg",
+      "cavity_count": 1,
+      "part_weight_g": 2.2,
+      "cycle_seconds": 30,
+      "material": "PP",
+      "barrel_temp_celsius": 210,
+      "mould_temp_celsius": 50,
+      "clamp_force_tonnes": 15,
+      "notes": "Standard peg/ball dripper. Affordable. Good for volume production."
+    },
+    {
+      "id": "endcap-mould-std",
+      "name": "Custom Small End Cap Mould",
+      "type": "injection",
+      "source": "FRADI-owned (custom-made)",
+      "part_id": "pp-endcap-std",
+      "cavity_count": 2,
+      "part_weight_g": 1.0,
+      "cycle_seconds": 20,
+      "material": "PP",
+      "barrel_temp_celsius": 210,
+      "mould_temp_celsius": 45,
+      "clamp_force_tonnes": 10,
+      "notes": "Two-cavity mould for end caps. Simple geometry. High uptime."
+    },
+    {
+      "id": "manifold-mould-std",
+      "name": "Custom Manifold Chamber Mould",
+      "type": "injection",
+      "source": "FRADI-owned (custom-made)",
+      "part_id": "pp-manifold-chamber",
+      "cavity_count": 1,
+      "part_weight_g": 12.0,
+      "cycle_seconds": 60,
+      "material": "PP",
+      "barrel_temp_celsius": 215,
+      "mould_temp_celsius": 55,
+      "clamp_force_tonnes": 20,
+      "notes": "Single-cavity. Larger part. 4-outlet distribution chamber."
+    },
+    {
+      "id": "connector-mould-m12",
+      "name": "Custom M12 Quick-Connect Mould",
+      "type": "injection",
+      "source": "FRADI-owned (custom-made)",
+      "part_id": "pp-connector-m12",
+      "cavity_count": 2,
+      "part_weight_g": 3.5,
+      "cycle_seconds": 25,
+      "material": "PP",
+      "barrel_temp_celsius": 212,
+      "mould_temp_celsius": 50,
+      "clamp_force_tonnes": 15,
+      "notes": "Two-cavity. Standardized 12mm bore for manifold/lateral connections."
+    }
+  ]
+}

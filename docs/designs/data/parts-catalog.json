@@ -1,0 +1,74 @@
+{
+  "parts": [
+    {
+      "id": "hdpe-lateral-16",
+      "type": "tubing",
+      "name": "HDPE Lateral Tubing 16mm OD",
+      "polymer": "HDPE",
+      "od_mm": 16,
+      "id_mm": 13,
+      "wall_mm": 1.5,
+      "grams_per_meter": 0.31,
+      "extrusion_profile_id": "hdpe-tubing-v4",
+      "uv_stable": true,
+      "notes": "Standard drip irrigation lateral. Cut to bed length."
+    },
+    {
+      "id": "hdpe-micro-4",
+      "type": "tubing",
+      "name": "HDPE Micro-tubing 4mm OD",
+      "polymer": "HDPE",
+      "od_mm": 4,
+      "id_mm": 2,
+      "wall_mm": 1,
+      "grams_per_meter": 0.05,
+      "extrusion_profile_id": "hdpe-micro-v4",
+      "uv_stable": true,
+      "notes": "Small-diameter for drip lines. Flexible."
+    },
+    {
+      "id": "pp-dripper-peg",
+      "type": "dripper",
+      "name": "PP Peg Dripper",
+      "polymer": "PP",
+      "grams": 2.2,
+      "mould_id": "peg-mould-std",
+      "moulder_cycle_seconds": 30,
+      "flow_rate_lph": 0.5,
+      "notes": "Plasticpreneur peg mould. Ball/peg dripper heat-sealed onto micro-tubing."
+    },
+    {
+      "id": "pp-endcap-std",
+      "type": "endcap",
+      "name": "PP End Cap",
+      "polymer": "PP",
+      "grams": 1.0,
+      "mould_id": "endcap-mould-std",
+      "moulder_cycle_seconds": 20,
+      "notes": "Seals the end of lateral tubing. Minimal. Small mould."
+    },
+    {
+      "id": "pp-manifold-chamber",
+      "type": "manifold",
+      "name": "PP Manifold Chamber",
+      "polymer": "PP",
+      "grams": 12.0,
+      "mould_id": "manifold-mould-std",
+      "moulder_cycle_seconds": 60,
+      "inlet_diameter_mm": 12,
+      "outlet_count": 4,
+      "notes": "Accepts water input, distributes to 4 laterals via quick-connects."
+    },
+    {
+      "id": "pp-connector-m12",
+      "type": "connector",
+      "name": "PP Quick-Connect M12",
+      "polymer": "PP",
+      "grams": 3.5,
+      "mould_id": "connector-mould-m12",
+      "moulder_cycle_seconds": 25,
+      "internal_diameter_mm": 12,
+      "notes": "Connects laterals to manifold. Reusable."
+    }
+  ]
+}
