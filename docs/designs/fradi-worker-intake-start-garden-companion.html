@@ -488,8 +488,30 @@
 
       <div class="screen-body">
 
-        <!-- Screen 1: Plot size -->
-        <section class="screen" data-screen="1" data-key="size">
+        <!-- Screen 1: Home -->
+        <section class="screen" data-screen="1" data-key="home">
+          <div style="display: grid; gap: 20px; align-content: center; min-height: 300px;">
+            <div>
+              <h2 class="title" data-pretext>Start a new garden plan</h2>
+              <p class="helper" data-pretext>Answer eight quick questions. This makes one picture guide for the gardener and one build sheet for the FRADI workshop.</p>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
+              <div style="background: var(--surface); border: 1.5px solid var(--line); border-radius: 16px; padding: 12px; display: grid; gap: 6px; align-content: start;">
+                <span style="font: 800 13px/1 'Nunito', sans-serif; color: var(--green-strong);">🌱</span>
+                <strong style="font: 800 13px/1.2 'Nunito', sans-serif;">Garden + crops</strong>
+                <span style="color: var(--muted); font-size: 12px; line-height: 1.4;">Plot size, water, and crop choices in one guided flow.</span>
+              </div>
+              <div style="background: var(--surface); border: 1.5px solid var(--line); border-radius: 16px; padding: 12px; display: grid; gap: 6px; align-content: start;">
+                <span style="font: 800 13px/1 'Nunito', sans-serif; color: var(--green-strong);">📄</span>
+                <strong style="font: 800 13px/1.2 'Nunito', sans-serif;">2 PDF outputs</strong>
+                <span style="color: var(--muted); font-size: 12px; line-height: 1.4;">One guide for the gardener. One build sheet for the workshop.</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Screen 2: Plot size -->
+        <section class="screen" data-screen="2" data-key="size">
           <h2 class="title" data-pretext>How big is the plot?</h2>
           <p class="helper" data-pretext>Estimate is fine. The worker can pace it out with the gardener.</p>
           <div class="number-row">
@@ -506,7 +528,7 @@
         </section>
 
         <!-- Screen 2: Soil, slope, water direction -->
-        <section class="screen" data-screen="2" data-key="ground">
+        <section class="screen" data-screen="3" data-key="ground">
           <h2 class="title" data-pretext>Soil, slope, and water direction</h2>
           <p class="helper" data-pretext>Three quick reads of the ground. Pictograms first, words second.</p>
 
@@ -558,7 +580,7 @@
         </section>
 
         <!-- Screen 3: Water source -->
-        <section class="screen" data-screen="3" data-key="water">
+        <section class="screen" data-screen="4" data-key="water">
           <h2 class="title" data-pretext>Where is the water?</h2>
           <p class="helper" data-pretext>Source, distance, and height shape what tubing and pressure the workshop builds.</p>
 
@@ -628,7 +650,7 @@
         </section>
 
         <!-- Screen 4: Water clarity -->
-        <section class="screen" data-screen="4" data-key="clarity">
+        <section class="screen" data-screen="5" data-key="clarity">
           <h2 class="title" data-pretext>Is the water clear?</h2>
           <p class="helper" data-pretext>Sediment can block drippers — the plan accounts for this.</p>
           <div class="tile-row" data-single="clarity">
@@ -648,7 +670,7 @@
         </section>
 
         <!-- Screen 5: Water tank -->
-        <section class="screen" data-screen="5" data-key="tank">
+        <section class="screen" data-screen="6" data-key="tank">
           <h2 class="title" data-pretext>Do you have a water tank?</h2>
           <p class="helper" data-pretext>A tank lets the system run on gravity instead of constant carrying.</p>
           <div class="tile-row" data-single="tankType">
@@ -676,7 +698,7 @@
         </section>
 
         <!-- Screen 6: Crops -->
-        <section class="screen" data-screen="6" data-key="crops">
+        <section class="screen" data-screen="7" data-key="crops">
           <h2 class="title" data-pretext>What will you grow?</h2>
           <p class="helper" data-pretext>Pick everything the gardener wants. Tap to toggle.</p>
           <div class="crops-grid" data-multi="crops">
@@ -720,7 +742,7 @@
         </section>
 
         <!-- Screen 7: Confirm -->
-        <section class="screen" data-screen="7" data-key="confirm">
+        <section class="screen" data-screen="8" data-key="confirm">
           <h2 class="title" data-pretext>Confirm and finish</h2>
           <p class="helper" data-pretext>The gardener's name and language go on the printed guide. The photo helps the workshop.</p>
 
@@ -763,7 +785,7 @@
 
   <script>
     // ---------- Screen routing ----------
-    const TOTAL = 7;
+    const TOTAL = 8;
     const screens = Array.from(document.querySelectorAll('.screen'));
     const backBtn = document.getElementById('backBtn');
     const progressLabel = document.getElementById('progressLabel');
@@ -849,17 +871,18 @@
     // ---------- CTA validity ----------
     function isScreenValid(n) {
       switch (n) {
-        case 1: return state.size.length > 0 && state.size.width > 0;
-        case 2: return state.ground.soil && state.ground.slope && state.ground.direction;
-        case 3: return state.water.source && state.water.distance && state.water.height && state.water.cans > 0;
-        case 4: return !!state.clarity;
-        case 5: {
+        case 1: return true; // Home screen is always valid
+        case 2: return state.size.length > 0 && state.size.width > 0;
+        case 3: return state.ground.soil && state.ground.slope && state.ground.direction;
+        case 4: return state.water.source && state.water.distance && state.water.height && state.water.cans > 0;
+        case 5: return !!state.clarity;
+        case 6: {
           if (!state.tank.type) return false;
           if (state.tank.type === 'none') return true;
           return state.tank.litres > 0;
         }
-        case 6: return state.crops.size > 0;
-        case 7: return state.confirm.name.trim().length > 0 && !!state.confirm.language;
+        case 7: return state.crops.size > 0;
+        case 8: return state.confirm.name.trim().length > 0 && !!state.confirm.language;
         default: return false;
       }
     }
@@ -869,7 +892,7 @@
       ctaBtn.disabled = !valid;
       ctaBtn.textContent = currentScreen === TOTAL ? 'Generate plan' : 'Continue';
       // Crops counter
-      if (currentScreen === 6) {
+      if (currentScreen === 7) {
         const count = state.crops.size;
         ctaMeta.textContent = count > 0 ? `${count} crop${count === 1 ? '' : 's'} selected` : '';
       } else {

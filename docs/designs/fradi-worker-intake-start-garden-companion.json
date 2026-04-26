@@ -5,13 +5,14 @@
   "screen_name": "fradi-worker-intake-flow",
   "pretext_tier": "card/grid",
   "screens": [
-    "step-1-plot-size",
-    "step-2-soil-slope-direction",
-    "step-3-water-source",
-    "step-4-water-clarity",
-    "step-5-water-tank",
-    "step-6-crops",
-    "step-7-confirm"
+    "step-1-home",
+    "step-2-plot-size",
+    "step-3-soil-slope-direction",
+    "step-4-water-source",
+    "step-5-water-clarity",
+    "step-6-water-tank",
+    "step-7-crops",
+    "step-8-confirm"
   ],
   "generated_at": "2026-04-26T16:00:00Z"
 }
