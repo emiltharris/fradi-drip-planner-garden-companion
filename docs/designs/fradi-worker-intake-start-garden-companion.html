@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FRADI Drip Planner - Garden Companion</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;500;700;800&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f7f4ea;
+      --bg-strong: #e8f0e4;
+      --surface: rgba(255, 255, 255, 0.88);
+      --surface-strong: #ffffff;
+      --surface-soft: #eff6ee;
+      --line: rgba(16, 58, 44, 0.1);
+      --line-strong: rgba(16, 58, 44, 0.18);
+      --text: #17392d;
+      --muted: #4d6b5f;
+      --green: #168157;
+      --green-strong: #0f6544;
+      --gold: #f3bb48;
+      --orange: #ef8c3c;
+      --blue-soft: #e6efff;
+      --blue-text: #32509d;
+      --shadow: 0 18px 40px rgba(37, 53, 44, 0.12);
+      --shadow-soft: 0 10px 24px rgba(37, 53, 44, 0.08);
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --radius-md: 18px;
+      --radius-sm: 14px;
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-7: 32px;
+      --space-8: 40px;
+      --phone-width: min(100%, 430px);
+      --content-max: 1260px;
+      --ring: 0 0 0 4px rgba(22, 129, 87, 0.18);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f1713;
+        --bg-strong: #14211b;
+        --surface: rgba(20, 33, 27, 0.86);
+        --surface-strong: #192721;
+        --surface-soft: #102019;
+        --line: rgba(219, 245, 229, 0.08);
+        --line-strong: rgba(219, 245, 229, 0.14);
+        --text: #ecf7ef;
+        --muted: #a4beb2;
+        --green: #57d39b;
+        --green-strong: #7be4b0;
+        --gold: #f5c45c;
+        --orange: #f3a05d;
+        --blue-soft: rgba(60, 92, 164, 0.22);
+        --blue-text: #c9d7ff;
+        --shadow: 0 18px 44px rgba(0, 0, 0, 0.28);
+        --shadow-soft: 0 12px 28px rgba(0, 0, 0, 0.18);
+        --ring: 0 0 0 4px rgba(87, 211, 155, 0.18);
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top left, rgba(243, 187, 72, 0.22), transparent 24%),
+        radial-gradient(circle at top right, rgba(22, 129, 87, 0.18), transparent 22%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-strong) 100%);
+      color: var(--text);
+      font-family: "Atkinson Hyperlegible Next", sans-serif;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.02;
+      background-image:
+        radial-gradient(rgba(0, 0, 0, 0.65) 0.45px, transparent 0.45px);
+      background-size: 9px 9px;
+      mix-blend-mode: multiply;
+    }
+
+    a, button {
+      transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    [contenteditable="true"]:focus-visible {
+      outline: none;
+      box-shadow: var(--ring);
+      border-radius: 12px;
+    }
+
+    .site-header {
+      max-width: var(--content-max);
+      margin: 0 auto;
+      padding: 20px 20px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-4);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, var(--gold) 0%, var(--orange) 100%);
+      position: relative;
+      box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.08);
+    }
+
+    .brand-mark::before,
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 999px;
+    }
+
+    .brand-mark::before {
+      width: 26px;
+      height: 6px;
+      top: 14px;
+      left: 9px;
+      box-shadow: 0 12px 0 rgba(255, 255, 255, 0.96);
+    }
+
+    .brand-mark::after {
+      width: 6px;
+      height: 28px;
+      top: 8px;
+      left: 12px;
+      box-shadow: 10px 0 0 rgba(255, 255, 255, 0.96), 20px 0 0 rgba(255, 255, 255, 0.96);
+    }
+
+    .brand-copy strong {
+      display: block;
+      font: 900 12px/1 "Nunito", sans-serif;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .brand-copy span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .status-pill,
+    .mini-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 42px;
+      padding: 0 14px;
+      border-radius: 999px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-soft);
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--green);
+      box-shadow: 0 0 0 6px rgba(22, 129, 87, 0.12);
+    }
+
+    .page {
+      max-width: var(--content-max);
+      margin: 0 auto;
+      padding: 18px 20px 56px;
+    }
+
+    .hero {
+      display: grid;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .hero-copy {
+      display: grid;
+      gap: 14px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      min-height: 36px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.68);
+      border: 1px solid var(--line);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--green-strong);
+    }
+
+    h1 {
+      margin: 0;
+      font: 900 clamp(40px, 7vw, 68px)/0.94 "Nunito", sans-serif;
+      letter-spacing: -0.05em;
+      max-width: 11ch;
+    }
+
+    .lede {
+      margin: 0;
+      max-width: 58ch;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.55;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      appearance: none;
+      border: 0;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 56px;
+      padding: 0 20px;
+      border-radius: 20px;
+      font: 900 17px/1 "Nunito", sans-serif;
+      letter-spacing: -0.02em;
+    }
+
+    .button-primary {
+      color: #f5fff9;
+      background: linear-gradient(180deg, var(--green) 0%, var(--green-strong) 100%);
+      box-shadow: 0 14px 28px rgba(16, 101, 68, 0.2);
+    }
+
+    .button-secondary {
+      color: var(--text);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      transform: translateY(-1px);
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 2px;
+    }
+
+    .hero-meta .mini-pill {
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .showcase {
+      display: grid;
+      gap: 18px;
+      align-items: start;
+      margin-top: 22px;
+    }
+
+    .phone-shell {
+      width: var(--phone-width);
+      margin: 0 auto;
+      border-radius: 38px;
+      background: #151716;
+      padding: 10px;
+      box-shadow: 0 32px 70px rgba(0, 0, 0, 0.22);
+      position: relative;
+    }
+
+    .phone-shell::before {
+      content: "";
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 118px;
+      height: 22px;
+      border-radius: 999px;
+      background: rgba(10, 10, 10, 0.95);
+      z-index: 2;
+    }
+
+    .app {
+      background: linear-gradient(180deg, #fbf9f2 0%, #edf4ee 100%);
+      border-radius: 30px;
+      overflow: hidden;
+      min-height: 780px;
+      position: relative;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .app {
+        background: linear-gradient(180deg, #112018 0%, #13231b 100%);
+      }
+    }
+
+    .app-header {
+      padding: 42px 18px 18px;
+      display: grid;
+      gap: 16px;
+      background:
+        radial-gradient(circle at top right, rgba(243, 187, 72, 0.26), transparent 30%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.54), rgba(255, 255, 255, 0));
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .app-header {
+        background:
+          radial-gradient(circle at top right, rgba(243, 187, 72, 0.18), transparent 32%),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0));
+      }
+    }
+
+    .app-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .app-bar .label {
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--green-strong);
+    }
+
+    .offline-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 36px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: #d9f4df;
+      color: #1e6a40;
+      font-size: 12px;
+      font-weight: 800;
+      border: 1px solid rgba(22, 129, 87, 0.12);
+    }
+
+    .offline-chip .status-dot {
+      width: 7px;
+      height: 7px;
+      box-shadow: none;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .offline-chip {
+        background: rgba(87, 211, 155, 0.16);
+        color: #bdf0d2;
+        border-color: rgba(87, 211, 155, 0.14);
+      }
+    }
+
+    .hero-panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 18px;
+      box-shadow: var(--shadow-soft);
+      display: grid;
+      gap: 14px;
+    }
+
+    .hero-visual {
+      display: grid;
+      grid-template-columns: 96px 1fr;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .icon-tile {
+      width: 96px;
+      height: 96px;
+      border-radius: 28px;
+      background: linear-gradient(180deg, var(--gold) 0%, var(--orange) 100%);
+      position: relative;
+      box-shadow: inset 0 -6px 0 rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+    }
+
+    .icon-tile::before,
+    .icon-tile::after {
+      content: "";
+      position: absolute;
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: 999px;
+    }
+
+    .icon-tile::before {
+      width: 58px;
+      height: 10px;
+      top: 30px;
+      left: 19px;
+      box-shadow: 0 20px 0 rgba(255, 255, 255, 0.98);
+    }
+
+    .icon-tile::after {
+      width: 10px;
+      height: 44px;
+      top: 25px;
+      left: 26px;
+      box-shadow: 20px 0 0 rgba(255, 255, 255, 0.98), 40px 0 0 rgba(255, 255, 255, 0.98);
+    }
+
+    .hero-panel h2 {
+      margin: 0;
+      font: 900 34px/0.97 "Nunito", sans-serif;
+      letter-spacing: -0.05em;
+    }
+
+    .hero-panel p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.48;
+    }
+
+    .app-cta {
+      min-height: 62px;
+      border-radius: 22px;
+      width: 100%;
+    }
+
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .quick-card {
+      background: rgba(255, 255, 255, 0.84);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 12px;
+      min-height: 110px;
+      display: grid;
+      gap: 8px;
+      align-content: start;
+      box-shadow: var(--shadow-soft);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .quick-card {
+        background: rgba(255, 255, 255, 0.03);
+      }
+    }
+
+    .quick-card strong {
+      font: 800 15px/1.1 "Nunito", sans-serif;
+    }
+
+    .quick-card span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .quick-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface-soft);
+      border: 1px solid var(--line);
+      position: relative;
+    }
+
+    .quick-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: var(--green-strong);
+      stroke-width: 1.9;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .panel-stack {
+      padding: 0 18px 20px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .panel-head strong {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font: 800 15px/1.1 "Nunito", sans-serif;
+    }
+
+    .icon-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface-soft);
+      border: 1px solid var(--line);
+    }
+
+    .icon-badge svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--green-strong);
+      stroke-width: 1.8;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .linkish {
+      color: var(--green-strong);
+      font-size: 12px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .draft-list,
+    .queue-list,
+    .language-list,
+    .step-list,
+    .output-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .draft-card,
+    .queue-card,
+    .step-card,
+    .output-card {
+      background: var(--surface-strong);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .draft-card,
+      .queue-card,
+      .step-card,
+      .output-card {
+        background: rgba(255, 255, 255, 0.03);
+      }
+    }
+
+    .draft-card strong,
+    .queue-card strong,
+    .step-card strong,
+    .output-card strong {
+      display: block;
+      font-size: 15px;
+      line-height: 1.3;
+      margin-bottom: 4px;
+    }
+
+    .draft-card p,
+    .queue-card p,
+    .step-card p,
+    .output-card p,
+    .support-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.48;
+    }
+
+    .draft-meta,
+    .queue-meta {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 0 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      background: var(--blue-soft);
+      color: var(--blue-text);
+    }
+
+    .tag-soft {
+      background: rgba(22, 129, 87, 0.1);
+      color: var(--green-strong);
+    }
+
+    .language-list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .language-card {
+      min-height: 94px;
+      border-radius: 18px;
+      padding: 12px;
+      background: var(--surface-strong);
+      border: 1px solid var(--line);
+      display: grid;
+      gap: 8px;
+      align-content: start;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .language-card {
+        background: rgba(255, 255, 255, 0.03);
+      }
+    }
+
+    .language-card.active {
+      border-color: rgba(22, 129, 87, 0.34);
+      box-shadow: inset 0 0 0 2px rgba(22, 129, 87, 0.08);
+    }
+
+    .language-card strong {
+      font: 800 14px/1.1 "Nunito", sans-serif;
+    }
+
+    .language-card span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .step-card {
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      border-radius: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(180deg, var(--gold) 0%, var(--orange) 100%);
+      color: #fff;
+      font: 900 16px/1 "Nunito", sans-serif;
+      box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.08);
+    }
+
+    .output-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .output-card::after {
+      content: "";
+      position: absolute;
+      right: -28px;
+      top: -28px;
+      width: 86px;
+      height: 86px;
+      border-radius: 999px;
+      background: rgba(243, 187, 72, 0.12);
+    }
+
+    .support-grid {
+      display: grid;
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .support-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      padding: 20px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .support-card h3,
+    .showcase-copy h3 {
+      margin: 0 0 10px;
+      font: 900 28px/0.98 "Nunito", sans-serif;
+      letter-spacing: -0.04em;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .stat {
+      min-height: 106px;
+      border-radius: 20px;
+      padding: 14px;
+      background: var(--surface-strong);
+      border: 1px solid var(--line);
+      display: grid;
+      align-content: start;
+      gap: 8px;
+    }
+
+    .stat strong {
+      font: 900 30px/0.95 "Nunito", sans-serif;
+      letter-spacing: -0.04em;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .showcase-copy {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .principles {
+      display: grid;
+      gap: 10px;
+    }
+
+    .principle {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 14px 16px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .principle strong {
+      display: block;
+      margin-bottom: 4px;
+      font: 800 15px/1.2 "Nunito", sans-serif;
+    }
+
+    .principle span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.46;
+    }
+
+    .site-footer {
+      margin-top: 28px;
+      padding: 16px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    [contenteditable="true"] {
+      cursor: text;
+    }
+
+    [data-pretext] {
+      display: block;
+      height: auto;
+      contain: layout style;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (min-width: 376px) {
+      .app-header {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .panel-stack {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .hero {
+        grid-template-columns: minmax(0, 0.98fr) minmax(360px, 0.82fr);
+        gap: 30px;
+      }
+
+      .showcase {
+        grid-template-columns: minmax(360px, 440px) minmax(0, 1fr);
+        gap: 28px;
+      }
+
+      .support-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .page {
+        padding-top: 26px;
+      }
+
+      .hero {
+        gap: 44px;
+      }
+
+      .showcase-copy {
+        padding-top: 12px;
+      }
+    }
+
+    @media (min-width: 1440px) {
+      .page {
+        padding-left: 28px;
+        padding-right: 28px;
+      }
+
+      .showcase {
+        gap: 42px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header" aria-label="Project header">
+    <a href="#app-preview" class="brand" aria-label="FRADI Drip Planner home">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-copy">
+        <strong>FRADI Drip Planner</strong>
+        <span>Offline field intake for custom recycled-plastic irrigation</span>
+      </span>
+    </a>
+    <div class="header-actions">
+      <div class="status-pill"><span class="status-dot" aria-hidden="true"></span>Ready offline</div>
+      <div class="mini-pill">Last sync 07:12</div>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <div class="eyebrow">Garden Companion Final</div>
+        <h1 id="hero-title" data-pretext contenteditable="true">Make the first step obvious for the worker and the gardener.</h1>
+        <p class="lede" data-pretext contenteditable="true">
+          This direction keeps the product operationally serious, but removes language friction fast. The worker sees sync status, drafts, outputs, and workshop queue immediately. The gardener looking over their shoulder sees large icons, clear labels, and a visible path from intake to finished irrigation plan.
+        </p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#app-preview">View mobile screen</a>
+          <a class="button button-secondary" href="#implementation-notes">Why this works</a>
+        </div>
+        <div class="hero-meta" aria-label="Design highlights">
+          <div class="mini-pill">Pictogram-first</div>
+          <div class="mini-pill">Multilingual-aware</div>
+          <div class="mini-pill">Field-ready contrast</div>
+          <div class="mini-pill">2 PDF outputs visible</div>
+        </div>
+      </div>
+
+      <div class="support-card">
+        <h3 data-pretext contenteditable="true">Screen intent</h3>
+        <p data-pretext contenteditable="true">
+          The home screen has one dominant action: start a new intake. Everything else exists to lower hesitation before the tap. Status is immediate, recent work is resumable, and the workshop handoff is visible enough that the product does not read like a generic survey app.
+        </p>
+        <div class="stat-grid" aria-label="Design checkpoints">
+          <div class="stat">
+            <strong data-pretext contenteditable="true">44px+</strong>
+            <span data-pretext contenteditable="true">Every tap target clears the mobile floor for field use.</span>
+          </div>
+          <div class="stat">
+            <strong data-pretext contenteditable="true">6 steps</strong>
+            <span data-pretext contenteditable="true">The intake promise is concrete enough to feel finishable.</span>
+          </div>
+          <div class="stat">
+            <strong data-pretext contenteditable="true">2 outputs</strong>
+            <span data-pretext contenteditable="true">Gardener guide plus workshop build sheet stay visible in the UX story.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="showcase" id="app-preview" aria-labelledby="mobile-preview-title">
+      <div class="phone-shell" aria-hidden="true">
+        <section class="app">
+          <header class="app-header">
+            <div class="app-bar">
+              <div class="label">FRADI Drip Planner</div>
+              <div class="offline-chip"><span class="status-dot" aria-hidden="true"></span>Ready offline</div>
+            </div>
+
+            <div class="hero-panel">
+              <div class="hero-visual">
+                <div class="icon-tile" aria-hidden="true"></div>
+                <div>
+                  <h2 data-pretext contenteditable="true">Start a new garden plan</h2>
+                  <p data-pretext contenteditable="true">Answer six quick questions. This makes one picture guide for the gardener and one build sheet for the FRADI workshop.</p>
+                </div>
+              </div>
+
+              <a href="#recent-drafts" class="button button-primary app-cta">Start new intake</a>
+
+              <div class="quick-grid" aria-label="Key shortcuts">
+                <div class="quick-card">
+                  <span class="quick-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M7 18h10"/><path d="M5 6h14"/><path d="M7 12h7"/><path d="M5 6l2 12"/><path d="M19 6l-2 12"/></svg>
+                  </span>
+                  <strong>Garden + crops</strong>
+                  <span data-pretext contenteditable="true">Plot size, water, and crop choices in one guided flow.</span>
+                </div>
+                <div class="quick-card">
+                  <span class="quick-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M5 5h14v10H5z"/><path d="M8 19h8"/><path d="M12 15v4"/><path d="M8 9h8"/><path d="M8 12h5"/></svg>
+                  </span>
+                  <strong>2 PDF outputs</strong>
+                  <span data-pretext contenteditable="true">One guide for the gardener. One build sheet for the workshop.</span>
+                </div>
+              </div>
+            </div>
+          </header>
+
+          <div class="panel-stack">
+            <section class="panel" id="recent-drafts" aria-labelledby="recent-drafts-title">
+              <div class="panel-head">
+                <strong id="recent-drafts-title"><span class="icon-badge" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M7 17c2.5 0 4.5-2.2 4.5-4.8V4.5"/><path d="M7 17c0-2.7 2.2-4.8 4.8-4.8H20"/><path d="M7 17c0 1.7-1.2 3-2.8 3S1.5 18.7 1.5 17s1.1-2.8 2.7-2.8c.8 0 1.6.3 2.1.8"/></svg>
+                </span>Recent drafts</strong>
+                <a class="linkish" href="/">See all</a>
+              </div>
+              <div class="draft-list">
+                <article class="draft-card">
+                  <strong data-pretext contenteditable="true">Hawa Abdulrahman Mohammed Idris</strong>
+                  <p data-pretext contenteditable="true">Tomato and kale beds. Saved 22 minutes ago after plot photo and water source check.</p>
+                  <div class="draft-meta">
+                    <span class="tag">Swahili output</span>
+                    <span class="tag tag-soft">Ready to finish</span>
+                  </div>
+                </article>
+                <article class="draft-card">
+                  <strong data-pretext contenteditable="true">Maryan Ali Hassan</strong>
+                  <p data-pretext contenteditable="true">Need final crop selection before generating the workshop build sheet.</p>
+                  <div class="draft-meta">
+                    <span class="tag">English intake</span>
+                    <span class="tag tag-soft">Water source pending</span>
+                  </div>
+                </article>
+              </div>
+            </section>
+
+            <section class="panel" aria-labelledby="queue-title">
+              <div class="panel-head">
+                <strong id="queue-title"><span class="icon-badge" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M12 3v6"/><path d="M12 15v6"/><path d="M4.5 7.5l4.2 2.4"/><path d="M15.3 14.1l4.2 2.4"/><path d="M4.5 16.5l4.2-2.4"/><path d="M15.3 9.9l4.2-2.4"/><circle cx="12" cy="12" r="3.4"/></svg>
+                </span>Workshop queue</strong>
+                <span class="linkish">2 ready today</span>
+              </div>
+              <div class="queue-list">
+                <article class="queue-card">
+                  <strong data-pretext contenteditable="true">2 build sheets ready</strong>
+                  <p data-pretext contenteditable="true">Total tubing 34 m. One dripper mold change needed before the afternoon run.</p>
+                </article>
+                <article class="queue-card">
+                  <strong data-pretext contenteditable="true">Last sync from office at 07:12</strong>
+                  <p data-pretext contenteditable="true">Three field records still saved locally. Safe to continue offline.</p>
+                </article>
+              </div>
+            </section>
+
+            <section class="panel" aria-labelledby="language-title">
+              <div class="panel-head">
+                <strong id="language-title"><span class="icon-badge" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M12 3c4.8 0 8.7 4 8.7 9s-3.9 9-8.7 9-8.7-4-8.7-9 3.9-9 8.7-9Z"/><path d="M3.8 9h16.4"/><path d="M3.8 15h16.4"/><path d="M12 3c2 2.2 3.2 5.5 3.2 9S14 18.8 12 21"/><path d="M12 3c-2 2.2-3.2 5.5-3.2 9S10 18.8 12 21"/></svg>
+                </span>Language</strong>
+                <span class="linkish">Change at intake</span>
+              </div>
+              <div class="language-list" aria-label="Language selection">
+                <div class="language-card active">
+                  <strong>English</strong>
+                  <span data-pretext contenteditable="true">Worker UI</span>
+                </div>
+                <div class="language-card">
+                  <strong>Swahili</strong>
+                  <span data-pretext contenteditable="true">Gardener guide</span>
+                </div>
+                <div class="language-card">
+                  <strong>Somali</strong>
+                  <span data-pretext contenteditable="true">Gardener guide</span>
+                </div>
+              </div>
+            </section>
+          </div>
+        </section>
+      </div>
+
+      <div class="showcase-copy" id="implementation-notes">
+        <div>
+          <div class="eyebrow">Implementation Notes</div>
+          <h3 id="mobile-preview-title" data-pretext contenteditable="true">Why this is the strongest version of Garden Companion</h3>
+          <p class="lede" data-pretext contenteditable="true">
+            The original concept risked becoming too friendly. This version fixes that by anchoring every bright, accessible piece of UI to an operational fact: offline safety, draft recovery, language selection, and workshop readiness.
+          </p>
+        </div>
+
+        <div class="principles">
+          <div class="principle">
+            <strong>One dominant action</strong>
+            <span data-pretext contenteditable="true">The start button owns the screen. That matches the real field task: begin the interview fast without scanning a dashboard.</span>
+          </div>
+          <div class="principle">
+            <strong>Shared-view clarity</strong>
+            <span data-pretext contenteditable="true">Large icon blocks and plain labels make sense even when the gardener is only glancing over the worker’s shoulder.</span>
+          </div>
+          <div class="principle">
+            <strong>Manufacturing stays visible</strong>
+            <span data-pretext contenteditable="true">The queue and the two-output story stop this from reading like a generic data collection form.</span>
+          </div>
+        </div>
+
+        <section class="support-card" aria-labelledby="steps-title">
+          <h3 id="steps-title" data-pretext contenteditable="true">The six-step promise</h3>
+          <div class="step-list">
+            <article class="step-card">
+              <span class="step-number" aria-hidden="true">1</span>
+              <div>
+                <strong data-pretext contenteditable="true">Plot size and shape</strong>
+                <p data-pretext contenteditable="true">Let the worker anchor the conversation with something visible and concrete.</p>
+              </div>
+            </article>
+            <article class="step-card">
+              <span class="step-number" aria-hidden="true">2</span>
+              <div>
+                <strong data-pretext contenteditable="true">Sun, slope, and soil</strong>
+                <p data-pretext contenteditable="true">Use pictorial choices instead of typed description wherever possible.</p>
+              </div>
+            </article>
+            <article class="step-card">
+              <span class="step-number" aria-hidden="true">3</span>
+              <div>
+                <strong data-pretext contenteditable="true">Water source and distance</strong>
+                <p data-pretext contenteditable="true">This is where the buildability story becomes real, so it deserves visible weight.</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="support-card" aria-labelledby="outputs-title">
+          <h3 id="outputs-title" data-pretext contenteditable="true">Outputs the user can trust</h3>
+          <div class="output-list">
+            <article class="output-card">
+              <strong data-pretext contenteditable="true">Gardener guide</strong>
+              <p data-pretext contenteditable="true">A single-page visual PDF in the gardener’s language, built for print or phone handoff.</p>
+            </article>
+            <article class="output-card">
+              <strong data-pretext contenteditable="true">Workshop build sheet</strong>
+              <p data-pretext contenteditable="true">Technical tubing, dripper, and machine settings calibrated to FRADI’s real extrusion and molding workflow.</p>
+            </article>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      Built as a standalone `design-html` artifact for the FRADI worker-facing intake start screen. Edit any highlighted text inline if you want to refine copy; the layout reflows automatically.
+    </footer>
+  </main>
+
+  <script type="module">
+    import { prepare, layout } from 'https://esm.sh/@chenglou/pretext';
+
+    const prepared = new Map();
+    const observers = [];
+
+    function parseLineHeight(style) {
+      const raw = style.lineHeight;
+      if (raw === 'normal') {
+        return Math.round(parseFloat(style.fontSize) * 1.4);
+      }
+      return parseFloat(raw);
+    }
+
+    function currentBreakpoint(width) {
+      if (width >= 1440) return 'xl';
+      if (width >= 1024) return 'lg';
+      if (width >= 768) return 'md';
+      if (width >= 376) return 'sm';
+      return 'xs';
+    }
+
+    function prepareElement(el) {
+      const style = getComputedStyle(el);
+      const text = el.textContent ?? '';
+      prepared.set(el, {
+        handle: prepare(text, style.font),
+        lineHeight: parseLineHeight(style)
+      });
+    }
+
+    function relayout() {
+      for (const [el, value] of prepared.entries()) {
+        const width = el.clientWidth;
+        if (!width) continue;
+        const result = layout(value.handle, width, value.lineHeight);
+        el.style.height = `${result.height}px`;
+      }
+      document.documentElement.dataset.breakpoint = currentBreakpoint(window.innerWidth);
+    }
+
+    async function boot() {
+      await document.fonts.ready;
+
+      const nodes = document.querySelectorAll('[data-pretext]');
+      nodes.forEach((el) => prepareElement(el));
+
+      const resizeObserver = new ResizeObserver(() => relayout());
+      resizeObserver.observe(document.body);
+      observers.push(resizeObserver);
+
+      for (const el of nodes) {
+        if (el.contentEditable === 'true') {
+          const mutationObserver = new MutationObserver(() => {
+            prepareElement(el);
+            relayout();
+          });
+          mutationObserver.observe(el, {
+            characterData: true,
+            childList: true,
+            subtree: true
+          });
+          observers.push(mutationObserver);
+        }
+      }
+
+      relayout();
+    }
+
+    boot();
+  </script>
+</body>
+</html>
