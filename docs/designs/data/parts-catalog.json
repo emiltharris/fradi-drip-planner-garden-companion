@@ -16,14 +16,15 @@
       "notes": "Extruded HDPE lateral with hand-drilled holes at 25cm spacing (adjustable per crop). Holes made with heated needle or drill. Simple, proven design. No custom moulds needed."
     },
     {
-      "id": "pp-endcap-std",
-      "type": "endcap",
-      "name": "PP End Cap",
-      "polymer": "PP",
-      "grams": 1.0,
-      "mould_id": "endcap-mould-std",
-      "moulder_cycle_seconds": 20,
-      "notes": "Seals the end of lateral tubing. Threaded or push-fit to 16mm OD."
+      "id": "cotton-wick-tape",
+      "type": "dripper",
+      "name": "Cotton Wick Tape",
+      "material": "cotton",
+      "width_mm": 20,
+      "thickness_mm": 3,
+      "grams_per_meter": 12,
+      "capillary_flow_rate_lph": 0.3,
+      "notes": "Strips of cotton fabric sewn or glued to lateral tubing. Water wicks through at controlled capillary rate (~0.3 L/hr per wick). No manufacturing needed — sourced or hand-sewn."
     },
     {
       "id": "pp-manifold-chamber",

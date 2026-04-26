@@ -1,21 +1,6 @@
 {
   "moulds": [
     {
-      "id": "endcap-mould-std",
-      "name": "Custom Small End Cap Mould",
-      "type": "injection",
-      "source": "FRADI-owned (custom-made)",
-      "part_id": "pp-endcap-std",
-      "cavity_count": 2,
-      "part_weight_g": 1.0,
-      "cycle_seconds": 20,
-      "material": "PP",
-      "barrel_temp_celsius": 210,
-      "mould_temp_celsius": 45,
-      "clamp_force_tonnes": 10,
-      "notes": "Two-cavity mould. Threads or barbed, fits 16mm OD tubing. Simple geometry."
-    },
-    {
       "id": "manifold-mould-std",
       "name": "Custom Manifold Chamber Mould",
       "type": "injection",
