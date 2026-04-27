@@ -7,16 +7,16 @@
 
 const CACHE_NAME = 'fradi-v1';
 const PRECACHE_URLS = [
-  '/app/index.html',
-  '/app/engine.js',
-  '/app/pdf-gardener.js',
-  '/app/pdf-workshop.js',
-  '/app/storage.js',
-  '/data/crops-catalog.json',
-  '/data/parts-catalog.json',
-  '/data/extrusion-profiles.json',
-  '/data/mould-catalog.json',
-  '/manifest.json'
+  './index.html',
+  './engine.js',
+  './pdf-gardener.js',
+  './pdf-workshop.js',
+  './storage.js',
+  '../data/crops-catalog.json',
+  '../data/parts-catalog.json',
+  '../data/extrusion-profiles.json',
+  '../data/mould-catalog.json',
+  '../manifest.json'
 ];
 
 // Install: precache assets
@@ -56,7 +56,7 @@ self.addEventListener('fetch', event => {
   }
 
   // Data files: try network first, fall back to cache
-  if (url.pathname.startsWith('/data/')) {
+  if (url.pathname.includes('/data/')) {
     event.respondWith(
       fetch(event.request)
         .then(response => {
@@ -91,7 +91,7 @@ self.addEventListener('fetch', event => {
       })
       .catch(() => {
         // Offline fallback: if available, return a cached version
-        return caches.match('/app/index.html');
+        return caches.match(new Request('./index.html'));
       })
   );
 });

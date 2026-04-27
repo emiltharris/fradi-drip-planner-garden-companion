@@ -802,10 +802,10 @@
     async function loadCatalogs() {
       try {
         const [crops, parts, extrusion, moulds] = await Promise.all([
-          fetch('/data/crops-catalog.json').then(r => r.json()),
-          fetch('/data/parts-catalog.json').then(r => r.json()),
-          fetch('/data/extrusion-profiles.json').then(r => r.json()),
-          fetch('/data/mould-catalog.json').then(r => r.json())
+          fetch('../data/crops-catalog.json').then(r => r.json()),
+          fetch('../data/parts-catalog.json').then(r => r.json()),
+          fetch('../data/extrusion-profiles.json').then(r => r.json()),
+          fetch('../data/mould-catalog.json').then(r => r.json())
         ]);
         return {
           crops: crops.crops,
