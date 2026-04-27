@@ -100,7 +100,7 @@ export async function generateWorkshopPDF(design) {
     `Barrel Temp: ${moulderData.manifolds.barrel_temp}°C`
   ];
   manifoldInfo.forEach(line => {
-    page.drawText(line, { x: margins.left + 20, y, size: 9, color: rgb(80, 80, 80) });
+    page.drawText(line, { x: margins.left + 20, y, size: 9, color: rgb(80/255, 80/255, 80/255) });
     y -= 11;
   });
   y -= 8;
@@ -113,7 +113,7 @@ export async function generateWorkshopPDF(design) {
     `Barrel Temp: ${moulderData.connectors.barrel_temp}°C`
   ];
   connectorInfo.forEach(line => {
-    page.drawText(line, { x: margins.left + 20, y, size: 9, color: rgb(80, 80, 80) });
+    page.drawText(line, { x: margins.left + 20, y, size: 9, color: rgb(80/255, 80/255, 80/255) });
     y -= 11;
   });
   y -= 8;

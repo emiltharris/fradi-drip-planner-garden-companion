@@ -38,13 +38,13 @@ export async function generateGardenerPDF(design, answers) {
     x: margins.left,
     y,
     size: 9,
-    color: rgb(80, 80, 80),
+    color: rgb(80/255, 80/255, 80/255),
   });
   page.drawText(`${new Date().toISOString().split('T')[0]}`, {
     x: margins.left + 400,
     y,
     size: 9,
-    color: rgb(80, 80, 80),
+    color: rgb(80/255, 80/255, 80/255),
   });
   y -= 14;
 
@@ -104,7 +104,7 @@ export async function generateGardenerPDF(design, answers) {
     x: rightX + 5,
     y: schedY,
     size: 8,
-    color: rgb(100, 100, 100),
+    color: rgb(100/255, 100/255, 100/255),
   });
 
   // ========== PER-CROP CARE STRIPS ==========
@@ -149,7 +149,7 @@ export async function generateGardenerPDF(design, answers) {
       x: stripX + 4,
       y: y - 22,
       size: 8,
-      color: rgb(60, 60, 60),
+      color: rgb(60/255, 60/255, 60/255),
     });
 
     // Care tip (truncate if needed)
@@ -158,7 +158,7 @@ export async function generateGardenerPDF(design, answers) {
       x: stripX + 4,
       y: y - 32,
       size: 7,
-      color: rgb(100, 100, 100),
+      color: rgb(100/255, 100/255, 100/255),
     });
 
     stripX += pageWidth / stripsPerRow;
@@ -199,14 +199,14 @@ export async function generateGardenerPDF(design, answers) {
       x: margins.left + 5,
       y,
       size: 8,
-      color: rgb(200, 0, 0),
+      color: rgb(200/255, 0, 0),
     });
     y -= 10;
     page.drawText(`  ${issue.fix}`, {
       x: margins.left + 12,
       y,
       size: 8,
-      color: rgb(60, 60, 60),
+      color: rgb(60/255, 60/255, 60/255),
     });
     y -= 12;
   });
