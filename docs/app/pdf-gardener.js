@@ -7,6 +7,21 @@
 
 import { PDFDocument, PDFPage, rgb } from 'https://esm.sh/pdf-lib';
 
+async function embedUnicodeFont(pdfDoc) {
+  // Download and embed Noto Sans from Google Fonts for Arabic/Somali support
+  // Noto Sans supports 150+ languages including Arabic and Somali
+  try {
+    const fontUrl = 'https://fonts.gstatic.com/s/notosans/v21/o-0NIpQlx3QUlC5A4PNr6QRM0nVeC6ZfLSMFNfXzO08.ttf';
+    const response = await fetch(fontUrl);
+    if (!response.ok) throw new Error('Font fetch failed');
+    const fontBytes = await response.arrayBuffer();
+    return await pdfDoc.embedFont(fontBytes);
+  } catch (err) {
+    console.warn('Failed to embed Unicode font:', err);
+    return null; // Will fall back to defaults
+  }
+}
+
 export async function generateGardenerPDF(design, answers) {
   const pdfDoc = await PDFDocument.create();
   const page = pdfDoc.addPage([842, 595]); // A4 landscape
@@ -18,18 +33,29 @@ export async function generateGardenerPDF(design, answers) {
   const lang = answers.confirm.language || 'en';
   const t = translations[lang] || translations.en;
 
+  // Load Unicode font for ar/so, use default for en/sw
+  let unicodeFont = null;
+  if (lang === 'ar' || lang === 'so') {
+    unicodeFont = await embedUnicodeFont(pdfDoc);
+  }
+
+  // Helper to apply font if needed
+  const fontOpt = unicodeFont ? { font: unicodeFont } : {};
+
   // ========== HEADER ==========
   page.drawText('FRADI Drip Planner', {
     x: margins.left,
     y,
     size: 16,
     color: rgb(22 / 255, 129 / 255, 87 / 255),
+    ...fontOpt
   });
   page.drawText(`${t.guide}`, {
     x: margins.left + 200,
     y,
     size: 16,
     color: rgb(0, 0, 0),
+    ...fontOpt
   });
   y -= 25;
 
@@ -39,12 +65,14 @@ export async function generateGardenerPDF(design, answers) {
     y,
     size: 9,
     color: rgb(80/255, 80/255, 80/255),
+    ...fontOpt
   });
   page.drawText(`${new Date().toISOString().split('T')[0]}`, {
     x: margins.left + 400,
     y,
     size: 9,
     color: rgb(80/255, 80/255, 80/255),
+    ...fontOpt
   });
   y -= 14;
 
@@ -64,13 +92,13 @@ export async function generateGardenerPDF(design, answers) {
     `${t.water}: ${design.daily_water_l}L ${t.perDay}`
   ];
   plotInfo.forEach(line => {
-    page.drawText(line, { x: leftX + 5, y: colY, size: 9, color: rgb(0, 0, 0) });
+    page.drawText(line, { x: leftX + 5, y: colY, size: 9, color: rgb(0, 0, 0), ...fontOpt });
     colY -= 11;
   });
   colY -= 8;
 
   // Beds summary
-  drawSectionBox(page, t.beds, leftX, colY, pageWidth / 2 - 10, 16);
+  drawSectionBox(page, t.beds, leftX, colY, pageWidth / 2 - 10, 16, fontOpt);
   colY -= 22;
   design.beds.forEach((bed, idx) => {
     const cropName = getCropName(bed.crop_id, answers.crops, lang);
@@ -79,13 +107,14 @@ export async function generateGardenerPDF(design, answers) {
       y: colY,
       size: 8,
       color: rgb(0, 0, 0),
+      ...fontOpt
     });
     colY -= 10;
   });
 
   // ========== WATERING SCHEDULE (RIGHT COLUMN) ==========
   let schedY = y;
-  drawSectionBox(page, t.wateringSchedule, rightX, schedY, pageWidth / 2 - 10, 16);
+  drawSectionBox(page, t.wateringSchedule, rightX, schedY, pageWidth / 2 - 10, 16, fontOpt);
   schedY -= 22;
 
   const schedule = design.watering_schedule;
@@ -96,7 +125,7 @@ export async function generateGardenerPDF(design, answers) {
     `${t.runtime}: ${schedule.runtime_hours} ${t.hours}`
   ];
   scheduleInfo.forEach(line => {
-    page.drawText(line, { x: rightX + 5, y: schedY, size: 9, color: rgb(0, 0, 0) });
+    page.drawText(line, { x: rightX + 5, y: schedY, size: 9, color: rgb(0, 0, 0), ...fontOpt });
     schedY -= 11;
   });
   schedY -= 5;
@@ -105,11 +134,12 @@ export async function generateGardenerPDF(design, answers) {
     y: schedY,
     size: 8,
     color: rgb(100/255, 100/255, 100/255),
+    ...fontOpt
   });
 
   // ========== PER-CROP CARE STRIPS ==========
   y -= 120;
-  drawSectionBox(page, t.cropCare, margins.left, y, pageWidth, 16);
+  drawSectionBox(page, t.cropCare, margins.left, y, pageWidth, 16, fontOpt);
   y -= 22;
 
   const stripHeight = 45;
@@ -142,6 +172,7 @@ export async function generateGardenerPDF(design, answers) {
       y: y - 10,
       size: 11,
       color: rgb(22 / 255, 129 / 255, 87 / 255),
+      ...fontOpt
     });
 
     // Spacing and water
@@ -150,6 +181,7 @@ export async function generateGardenerPDF(design, answers) {
       y: y - 22,
       size: 8,
       color: rgb(60/255, 60/255, 60/255),
+      ...fontOpt
     });
 
     // Care tip (truncate if needed)
@@ -159,6 +191,7 @@ export async function generateGardenerPDF(design, answers) {
       y: y - 32,
       size: 7,
       color: rgb(100/255, 100/255, 100/255),
+      ...fontOpt
     });
 
     stripX += pageWidth / stripsPerRow;
@@ -176,7 +209,7 @@ export async function generateGardenerPDF(design, answers) {
 
   // ========== TROUBLESHOOTING ==========
   y -= 10;
-  drawSectionBox(page, t.troubleshooting, margins.left, y, pageWidth, 16);
+  drawSectionBox(page, t.troubleshooting, margins.left, y, pageWidth, 16, fontOpt);
   y -= 22;
 
   const issues = [
@@ -200,6 +233,7 @@ export async function generateGardenerPDF(design, answers) {
       y,
       size: 8,
       color: rgb(200/255, 0, 0),
+      ...fontOpt
     });
     y -= 10;
     page.drawText(`  ${issue.fix}`, {
@@ -207,6 +241,7 @@ export async function generateGardenerPDF(design, answers) {
       y,
       size: 8,
       color: rgb(60/255, 60/255, 60/255),
+      ...fontOpt
     });
     y -= 12;
   });
@@ -216,7 +251,8 @@ export async function generateGardenerPDF(design, answers) {
     x: margins.left,
     y: margins.bottom - 5,
     size: 7,
-    color: rgb(150 / 255, 150 / 255, 150 / 255)
+    color: rgb(150 / 255, 150 / 255, 150 / 255),
+    ...fontOpt
   });
 
   const pdfBytes = await pdfDoc.save();
@@ -225,7 +261,7 @@ export async function generateGardenerPDF(design, answers) {
 
 // ========== Helpers ==========
 
-function drawSectionBox(page, title, x, y, width, height) {
+function drawSectionBox(page, title, x, y, width, height, fontOpt = {}) {
   // Background
   page.drawRectangle({
     x,
@@ -240,6 +276,7 @@ function drawSectionBox(page, title, x, y, width, height) {
     y: y - height + 4,
     size: 12,
     color: rgb(1, 1, 1),
+    ...fontOpt
   });
 }
 
