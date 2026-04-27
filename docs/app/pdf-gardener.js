@@ -7,18 +7,31 @@
 
 import { PDFDocument, PDFPage, rgb } from 'https://esm.sh/pdf-lib';
 
-async function embedUnicodeFont(pdfDoc) {
-  // Download and embed Noto Sans from Google Fonts for Arabic/Somali support
-  // Noto Sans supports 150+ languages including Arabic and Somali
+async function embedUnicodeFont(pdfDoc, lang) {
+  // For Arabic/Somali, embed a Unicode font that supports these characters
   try {
-    const fontUrl = 'https://fonts.gstatic.com/s/notosans/v21/o-0NIpQlx3QUlC5A4PNr6QRM0nVeC6ZfLSMFNfXzO08.ttf';
-    const response = await fetch(fontUrl);
-    if (!response.ok) throw new Error('Font fetch failed');
+    // Use Noto Sans Arabic for ar, Noto Sans for so (fallback)
+    const fontUrls = {
+      ar: 'https://cdn.jsdelivr.net/npm/noto-sans-arabic@latest/NotoSansArabic-Regular.ttf',
+      so: 'https://cdn.jsdelivr.net/npm/@fontsource/noto-sans@latest/files/noto-sans-latin-400-normal.ttf'
+    };
+
+    const fontUrl = fontUrls[lang] || fontUrls.so;
+    console.log(`Embedding font for ${lang}:`, fontUrl);
+
+    const response = await fetch(fontUrl, { mode: 'cors' });
+    if (!response.ok) throw new Error(`Font fetch failed: ${response.status}`);
+
     const fontBytes = await response.arrayBuffer();
-    return await pdfDoc.embedFont(fontBytes);
+    console.log(`Font loaded: ${fontBytes.byteLength} bytes`);
+
+    const font = await pdfDoc.embedFont(fontBytes);
+    console.log('Font embedded successfully');
+    return font;
   } catch (err) {
-    console.warn('Failed to embed Unicode font:', err);
-    return null; // Will fall back to defaults
+    console.error('Failed to embed Unicode font:', err);
+    // Fallback: return null and hope text renders (will likely fail with WinAnsi error)
+    return null;
   }
 }
 
@@ -36,7 +49,7 @@ export async function generateGardenerPDF(design, answers) {
   // Load Unicode font for ar/so, use default for en/sw
   let unicodeFont = null;
   if (lang === 'ar' || lang === 'so') {
-    unicodeFont = await embedUnicodeFont(pdfDoc);
+    unicodeFont = await embedUnicodeFont(pdfDoc, lang);
   }
 
   // Helper to apply font if needed
