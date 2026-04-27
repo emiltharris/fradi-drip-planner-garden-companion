@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FRADI Drip Planner - Intake Flow</title>
-  <link rel="manifest" href="/manifest.json" />
+  <link rel="manifest" href="../../manifest.json" />
   <meta name="theme-color" content="#168357" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -690,7 +690,7 @@
           <h2 class="title" data-pretext>What will you grow?</h2>
           <p class="helper" data-pretext>Pick everything the gardener wants. Tap to toggle.</p>
           <div class="crops-grid" data-multi="crops">
-            <button class="tile" data-value="sukuma_wiki">
+            <button class="tile" data-value="sukuma">
               <span class="tile-icon"><svg viewBox="0 0 24 24"><path d="M12 4c-4 0-7 3-7 7 0 3 2 5 7 9 5-4 7-6 7-9 0-4-3-7-7-7z"/><path d="M12 11v9"/></svg></span>
               <span class="tile-label">Sukuma wiki</span>
             </button>
@@ -742,6 +742,9 @@
           <div class="row-group">
             <div class="row-label">Gardener language</div>
             <div class="tile-row" data-single="language">
+              <button class="tile" data-value="en">
+                <span class="tile-label">English</span>
+              </button>
               <button class="tile" data-value="sw">
                 <span class="tile-label">Swahili</span>
               </button>
@@ -802,10 +805,10 @@
     async function loadCatalogs() {
       try {
         const [crops, parts, extrusion, moulds] = await Promise.all([
-          fetch('/data/crops-catalog.json').then(r => r.json()),
-          fetch('/data/parts-catalog.json').then(r => r.json()),
-          fetch('/data/extrusion-profiles.json').then(r => r.json()),
-          fetch('/data/mould-catalog.json').then(r => r.json())
+          fetch('../data/crops-catalog.json').then(r => r.json()),
+          fetch('../data/parts-catalog.json').then(r => r.json()),
+          fetch('../data/extrusion-profiles.json').then(r => r.json()),
+          fetch('../data/mould-catalog.json').then(r => r.json())
         ]);
         return {
           crops: crops.crops,

@@ -50,17 +50,15 @@ export async function designGarden(answers, catalogs) {
   const waterAvailableL = cansPerDay * 20; // 20L per jerry can
 
   // Watering schedule: how many hours per day to run the system
-  const runTimeHours = dailyWaterL / (waterAvailableL / 24);
-
   // BOM: bill of materials
-  const tubeGramsPerMeter = 0.31; // HDPE 16mm OD spec
+  const tubeGramsPerMeter = resolveTubingGramsPerMeter(catalogs.parts);
   const totalTubingM = beds.reduce((sum, bed) => sum + bed.tubing_m, 0);
   const totalTubingGrams = totalTubingM * tubeGramsPerMeter;
 
   const totalDrippers = beds.reduce((sum, bed) => sum + bed.dripper_count, 0);
-  const wickGramsPerMeter = 12; // cotton wick tape spec
+  const wickGramsPerMeter = resolvePartGramsPerMeter(catalogs.parts, 'cotton-wick-tape', 12);
   const totalWickM = totalTubingM; // one wick per meter of tubing
-  const totalWickGrams = totalWickM * (wickGramsPerMeter / 100); // grams per cm
+  const totalWickGrams = totalWickM * wickGramsPerMeter;
 
   // Manifold: pick based on number of beds
   const bedsPerManifold = 4; // one 4-outlet manifold per 4 beds max
@@ -86,6 +84,7 @@ export async function designGarden(answers, catalogs) {
   const schedule = computeWateringSchedule(
     dailyWaterL,
     waterAvailableL,
+    totalDrippers,
     answers.water.source,
     answers.tank.type
   );
@@ -117,7 +116,7 @@ export async function designGarden(answers, catalogs) {
 
 function layoutBeds(areaM2, crops, slope, waterDistance) {
   // Simple layout: allocate area proportionally to crop water demand
-  const totalWaterDemand = crops.reduce((sum, c) => sum + c.water_l_per_plant_per_day, 10);
+  const totalWaterDemand = crops.reduce((sum, c) => sum + c.water_l_per_plant_per_day, 0);
 
   // Assume beds are 1.2m wide (standard), adjust length per crop
   const bedWidth = 1.2;
@@ -204,13 +203,13 @@ function computeManufacturing(bom, catalogs) {
 // Watering Schedule: Frequency, duration, time of day
 // ============================================================================
 
-function computeWateringSchedule(dailyWaterL, waterAvailableL, waterSource, tankType) {
+function computeWateringSchedule(dailyWaterL, waterAvailableL, emitterCount, waterSource, tankType) {
   const runsPerDay = waterAvailableL >= dailyWaterL ? 1 : 2;
   const waterPerRun = dailyWaterL / runsPerDay;
 
-  // Assume cotton wicks drip at ~0.3 L/hr (conservative)
-  const wckCapacityLHr = 0.3;
-  const runTimeHours = waterPerRun / wckCapacityLHr;
+  // Cotton wick flow is per emitter, not for the entire system.
+  const totalFlowRateLHr = Math.max(emitterCount, 1) * 0.3;
+  const runTimeHours = waterPerRun / totalFlowRateLHr;
 
   const timeOfDay = waterSource === 'tap' ? '06:00' : '07:00'; // Early morning watering
 
@@ -222,6 +221,37 @@ function computeWateringSchedule(dailyWaterL, waterAvailableL, waterSource, tank
     frequency_text: runsPerDay === 1 ? 'Once daily' : 'Twice daily',
     notes: `Cotton wicks deliver water at capillary rate. ${tankType === 'none' ? 'Manual watering with jerry cans.' : 'Tank gravity feed available.'}`
   };
+}
+
+function resolvePartGramsPerMeter(parts, partId, fallback) {
+  const part = parts?.find(item => item.id === partId);
+  if (typeof part?.grams_per_meter === 'number' && Number.isFinite(part.grams_per_meter) && part.grams_per_meter > 0) {
+    return part.grams_per_meter;
+  }
+  return fallback;
+}
+
+function resolveTubingGramsPerMeter(parts) {
+  const tubing = parts?.find(item => item.id === 'hdpe-lateral-16-perforated');
+  if (!tubing) {
+    return 65;
+  }
+
+  if (typeof tubing.grams_per_meter === 'number' && tubing.grams_per_meter >= 1) {
+    return tubing.grams_per_meter;
+  }
+
+  const outerDiameterMm = Number(tubing.od_mm);
+  const innerDiameterMm = Number(tubing.id_mm);
+  if (outerDiameterMm > innerDiameterMm && innerDiameterMm > 0) {
+    const outerRadiusM = outerDiameterMm / 2000;
+    const innerRadiusM = innerDiameterMm / 2000;
+    const crossSectionM2 = Math.PI * (outerRadiusM ** 2 - innerRadiusM ** 2);
+    const hdpeDensityKgPerM3 = 950;
+    return crossSectionM2 * hdpeDensityKgPerM3 * 1000;
+  }
+
+  return 65;
 }
 
 // ============================================================================

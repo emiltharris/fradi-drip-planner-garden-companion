@@ -2,29 +2,18 @@
   "name": "FRADI Drip Planner",
   "short_name": "Drip Planner",
   "description": "Design and build drip irrigation systems for your garden",
-  "start_url": "/app/",
-  "scope": "/",
+  "start_url": "./docs/app/",
+  "scope": "./docs/",
   "display": "standalone",
   "orientation": "portrait-primary",
   "background_color": "#ffffff",
   "theme_color": "#168357",
   "icons": [
     {
-      "src": "/assets/icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "/assets/icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "/assets/screenshots/screenshot-1.png",
-      "sizes": "540x720",
-      "type": "image/png"
+      "src": "./docs/assets/icons/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
     }
   ],
   "categories": ["agriculture", "education", "productivity"],
@@ -33,12 +22,12 @@
       "name": "New Design",
       "short_name": "Design",
       "description": "Start a new garden design",
-      "url": "/app/?action=new",
+      "url": "./docs/app/?action=new",
       "icons": [
         {
-          "src": "/assets/icons/shortcut-new.png",
-          "sizes": "192x192",
-          "type": "image/png"
+          "src": "./docs/assets/icons/shortcut-new.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
         }
       ]
     },
@@ -46,12 +35,12 @@
       "name": "Recent Designs",
       "short_name": "Recent",
       "description": "View your saved garden designs",
-      "url": "/app/?action=recent",
+      "url": "./docs/app/?action=recent",
       "icons": [
         {
-          "src": "/assets/icons/shortcut-recent.png",
-          "sizes": "192x192",
-          "type": "image/png"
+          "src": "./docs/assets/icons/shortcut-recent.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
         }
       ]
     }
